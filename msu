@@ -1,0 +1,378 @@
+#!/bin/bash
+
+# ~/.msu: executed by bash(1) for non-login shells.
+# This is sourced to refresh some of the application 
+# specific customized env variables. Although this is
+# automatically by the ~/.bashrc, however you can also
+# source it yourself, in that case you need to disable
+# the load command in the ~/.bashrc --
+#
+#	if [ -f ~/.msu ]; then
+#		. ~/.msu
+#	fi
+
+# Most of my craps are installed in /opt, but might change if host is different
+hostname=$HOSTNAME ;
+if [ "$hostname" = "coin4-linux" ]; then
+    installdir="/opt" ;
+fi
+
+# if a variable 'bigstr' is empty, then add the string 'substr' to it,
+# if it does not contain the string 'substr', then append 'substr' to it
+_augment()
+{
+	target=$1
+	bigstr=${!1}
+	substr=$2
+	
+	if [ -z "$bigstr" ]; then
+		# declare -g -- "$target=$substr"
+		eval "$target=\$substr"
+	elif [[ $bigstr != "$substr" 
+		&& $bigstr != *:"$substr" 
+		&& $bigstr != "$substr":* 
+		&& $bigstr != *:"$substr":* ]]; then
+		# declare -g -- "$target=$bigstr:$substr"
+		eval "$target=\$bigstr:\$substr"
+	fi
+}
+
+# remove duplicate substring from a bash env string
+_removedup()
+{
+	path=$1 ;
+    IFS=':' read -ra tokens <<< "$path" ;
+    uniq=($(tr ' ' '\n' <<< "${tokens[@]}" | sort -ru | tr '\n' ' '))
+    concat=`printf '%s:' "${uniq[@]}"` ;
+    echo "${concat%?}" ;
+}
+
+
+# ------------------------ MSU VPN setup using pulse secure ----------------------------------
+plslibpath=/usr/local/pulse
+if [ -d "$plslibpath" ]; then
+	_augment LD_LIBRARY_PATH "$plslibpath" ;
+fi
+
+#------------------------ if the machine is one from MSU DECS ---------------------------------
+if [ "$USER" = "talukde1" ]; then
+    _augment PATH "$HOME/.sys-utils/bin"
+fi
+
+#------------------------ check if __git_ps1 works --------------------------------------------
+gitps1="no"
+if [ -n $(command -v __git_ps1) ]; then
+    gitps1="yes"
+fi
+
+# ---------------------- A fancy color prompt ------------------------------------------------
+if [ "$color_prompt" = "yes" ]; then
+    if [[ "$hostname" == "coin04-linux" ]]; then
+        if [[ "$gitps1" == "no" ]]; then
+            export PS1='\[\033[0;32m\]\[\033[0;32m\]\u\[\033[0;35m\]@\[\033[0;36m\]\h:\[\033[0;34m\]\]\w\n\[\033[0;32m\]└─\033[0;32m\]>>\[\033[0m\] '
+        else
+            export PS1='\[\033[0;32m\]\[\033[0;32m\]\u\[\033[0;35m\]@\[\033[0;36m\]\h:\[\033[0;34m\]\]\w\n\[\033[0;32m\]└─\[\033[38;5;003m\]$(__git_ps1 | sed -e "s/^[[:space:]]*//")\[\033[0;32m\]>>\[\033[0m\] '
+        fi
+    elif [[ "$hostname" == "black" ]] || [[ "$hostname" == *compute* ]]; then
+        if [[ "$gitps1" == "no" ]]; then
+            export PS1='\[\033[0;32m\]\[\033[0;32m\]\u\[\033[0;35m\]@\[\033[0;36m\]\h:\[\033[0;34m\]\]\w\n\[\033[0;32m\]└─\[\033[0;32m\]«†»>\[\033[0m\] '
+        else
+            export PS1='\[\033[0;32m\]\[\033[0;32m\]\u\[\033[0;35m\]@\[\033[38;5;033m\]\h:\[\033[0;34m\]\]\w\n\[\033[0;32m\]└─\[\033[0;32m\]«†»\[\033[38;5;003m\]$(__git_ps1 | sed -r "s/^[[:space:]]*//")\[\033[0;32m\]>\[\033[0m\] '
+        fi
+    fi
+fi
+
+#--------------------------------- git aware prompt --------------------------------------------
+gaprompt="$HOME/.bash/git-aware-prompt";
+if [ -e "$HOME/.bash/git-aware-prompt" ]; then
+	export GITAWAREPROMPT="$HOME/.bash/git-aware-prompt";
+	source "${GITAWAREPROMPT}/main.sh"
+fi
+
+### -------------------------------- MSU RA stuffs ----------------------------------- ###
+# intel compiler stuffs 
+intelcc=/opt/intel/cc/compiler/lib/intel64 ;
+intelfort=/opt/intel/fortran/compiler/lib/intel64 ;
+# intelmpirt=/opt/intel/mpirt/bin/intel64 ;
+if [ -d "$intelcc" ]; then
+	_augment PATH "$intelcc" ;
+	_augment LD_LIBRARY_PATH "$intelcc" ;
+	_augment LIBRARY_PATH "$intelcc" ;
+	_augment PATH "$intelfort" ;
+	_augment LD_LIBRARY_PATH "$intelfort" ;
+	_augment LIBRARY_PATH "$intelfort" ;
+fi
+
+# for NPM 
+npmglobalpath="$HOME/.npm-global"
+if [ -d "$npmglobalpath" ]; then
+    _augment PATH "$npmglobalpath/bin"
+fi
+
+# webstorm
+webstormpath="/opt/WebStorm-191.7479.14"
+if [ -d "$webstormpath" ]; then
+    _augment PATH "$webstormpath/bin"
+fi
+
+#-------------------------------- CLI access for VScode  --------------------------------------
+# I had to move it here since the spaces in the path string does not work with removedup
+vscodepath="/Applications/Visual Studio Code.app/Contents/Resources/app/bin/"
+if [ -d "$vscodepath" ]; then
+    _augment PATH "$vscodepath"
+fi
+
+
+### ------------------------------ All MSU Courses ----------------------------------- ###
+# CSE814 Formal Methods, for ada/spark GPL
+if [ "$hostname" = "kopashamsu" ]; then
+	GNAT_BIN_PATH=/media/$USER/data/msu-courses/cse814-formal-methods/bin/gnat-gpl/bin;
+elif [ "$hostname" = "coin4-linux" ]; then
+	GNAT_BIN_PATH=$HOME/kat/msu-courses/cse814-formal-methods/bin/gnat-gpl/bin;
+fi
+if [ -d "$GNAT_BIN_PATH" ] && [ -d "$GNAT_BIN_PATH" ]; then
+	_augment PATH "$GNAT_BIN_PATH";
+fi
+# and then
+if [ "$hostname" = "kopashamsu" ]; then
+	SPARK_BIN_PATH=/media/$USER/data/msu-courses/cse814-formal-methods/bin/spark-gpl/bin;
+elif [ "$hostname" = "coin4-linux" ]; then
+	SPARK_BIN_PATH=$HOME/kat/msu-courses/cse814-formal-methods/bin/spark-gpl/bin;
+fi
+if [ -d "$SPARK_BIN_PATH" ] && [ -d "$SPARK_BIN_PATH" ]; then
+	_augment PATH "$SPARK_BIN_PATH";
+fi
+
+# CSE835 Graph Theory
+# for pg
+if [ "$hostname" = "kopashamsu" ]; then
+	PY_MOD_PATH=/media/$USER/data/msu-courses/cse835-graph-theory/bin/pg;
+elif [ "$hostname" = "coin4-linux" ]; then
+	PY_MOD_PATH=$HOME/kat/msu-courses/cse835-graph-theory/bin/pg;
+fi
+# and then
+if [ -d "$PY_MOD_PATH" ]; then
+	_augment PYTHONPATH "$PY_MOD_PATH";
+fi
+
+# for nauty
+if [ "$hostname" = "kopahsamsu" ]; then
+	# NAUTY_BIN_PATH=/media/$USER/data/msu-courses/cse835-graph-theory/bin/nauty25r9;
+	NAUTY_BIN_PATH=/media/$USER/data/msu-courses/cse835-graph-theory/ahe/nauty;
+elif [ "$hostname" = "coin4-linux" ]; then
+	# NAUTY_BIN_PATH=$HOME/kat/msu-courses/cse835-graph-thoery/bin/nauty25r9;
+	NAUTY_BIN_PATH=$HOME/kat/msu-courses/cse835-graph-thoery/ahe/nauty;
+fi
+# and then
+if [ -d "$NAUTY_BIN_PATH" ]; then
+	_augment PATH "$NAUTY_BIN_PATH";
+fi
+
+# for cse450 TA's
+# TEACHERS_PET_GITHUB_TOKEN=8495c8e025f7aed6933f9ddf8d3350a017330378
+# SSL_CERT_FILE=/usr/lib/ssl/cert.pem
+
+# for cse803-cv
+OPENCV_PKGCONFIG="/opt/opencv/lib/pkgconfig" ;
+if [ -d "$OPENCV_PKGCONFIG" ]; then
+	PKG_CONFIG_PATH="$PKG_CONFIG_PATH":/opt/opencv/lib/pkgconfig ;
+fi
+# and then 
+OPENCV_PATH="/opt/opencv/lib" ;
+if [ -d "$OPENCV_PATH" ]; then
+	_augment LD_LIBRARY_PATH "$OPENCV_PATH";
+fi
+
+# BVLC/caffe
+caffebin="/media/$USER/data/research/caffe/distribute/bin" ;
+if [ -d "$caffebin" ]; then
+	_augment PATH $caffebin ;
+fi
+caffepy="/media/$USER/data/research/caffe/distribute/python" ;
+# pycaffe=/media/$USER/data/research/caffe/python/caffe ;
+if [ -d "$caffepy" ]; then
+	_augment PYTHONPATH $caffepy ;
+fi
+caffelib="/media/$USER/data/research/caffe/distribute/lib" ;
+if [ -d "$caffelib" ]; then
+	_augment LD_LIBRARY_PATH $caffelib ;
+fi
+
+# for cse824 advcompnet
+nslib="/opt/ns2/lib" ;
+if [ -d "$nslib" ]; then
+    _augment LD_LIBRARY_PATH "$nslib" ;
+fi
+
+nsbin="/opt/ns2/bin" ; 
+if [ -d "$nsbin" ]; then
+	_augment PATH "$nsbin";
+fi
+
+# for ANN course
+# theano
+THEANO_FLAGS=blas.ldflags="-L/usr/lib/ -lblas"
+
+#------------------------ almost end of all env variable --------------------------------------
+# remove duplicate entries, if any --
+PATH=`_removedup "$PATH"` ;
+LD_LIBRARY_PATH=`_removedup "$LD_LIBRARY_PATH"` ;
+LIBRARY_PATH=`_removedup "$LIBRARY_PATH"` ;
+PYTHONPATH=`_removedup "$PYTHONPATH"` ;
+THEANO_FLAGS=`_removedup "$THEANO_FLAGS"` ;
+
+# Now, export them all --
+[[ ! -z $PATH ]] && export PATH;
+[[ ! -z $LD_LIBRARY_PATH ]] && export LD_LIBRARY_PATH;
+[[ ! -z $LIBRARY_PATH ]] && export LIBRARY_PATH;
+[[ ! -z $PYTHONPATH ]] && export PYTHONPATH;
+[[ ! -z $SSL_CERT_FILE ]] && export SSL_CERT_FILE ;
+[[ ! -z $THEANO_FLAGS ]] && export THEANO_FLAGS ;
+[[ ! -z $TEACHERS_PET_GITHUB_TOKEN ]] && export TEACHERS_PET_GITHUB_TOKEN ;
+
+
+
+### --------------------------- Now define aliases ------------------------------------------
+
+# purge command
+_purge()
+{
+    if [[ "$hostname" == "kopashamsu" ]]; then
+        gio trash --empty
+    elif [[ "$hostname" == *"gateway"* ]]; then
+        /bin/rm -rf $HOME/.local/share/Trash/files/*
+        /bin/rm -rf $HOME/.local/share/Trash/info/*
+    elif [[ "$hostname" == *"dev-intel"* ]]; then
+        /bin/rm -rf $HOME/.local/share/Trash/files/*
+        /bin/rm -rf $HOME/.local/share/Trash/info/*
+    fi
+}
+alias rm!='_purge'
+
+# webstorm
+alias webstorm='webstorm.sh &'
+
+# ------------------- All MSU course related aliases ---------------------------------------------
+# for cse814: formal methods in sw devlopment course at msu
+# this is for the alloy analyzer
+if [ "$hostname" = "kopashamsu" ]; then
+	alias alloy='java -jar /media/'$USER'/data/msu-courses/cse814-formal-methods/bin/alloy4.2.jar'
+elif [ "$hostname" = "coin4-linux" ]; then
+	alias alloy='java -jar '$HOME'/kat/msu-courses/cse814-formal-methods/bin/alloy4.2.jar'
+fi
+
+# -------------------- MSU cluster/machine accesses --------------------
+# --------------------------- HPCC machines ----------------------------
+# gateway node (this is working right now)
+alias hpcc='ssh hpcc'
+alias hpccx='ssh -X hpcc'
+alias hpccy='ssh -Y hpcc'
+# gateway node (obsolete ?)
+alias hpccgw='ssh hpccgw'
+alias hpccgwx='ssh -X hpccgw'
+alias hpccgwy='ssh -Y hpccgw'
+# eval node (obsolete ?)
+alias hpcceval='ssh hpcceval'
+alias hpccevalx='ssh -X hpcceval'
+alias hpccevaly='ssh -Y hpcceval'
+# rdp on-campus
+alias hpccrdp='ssh hpccrdp'
+alias hpccrdpx='ssh -X hpccrdp'
+alias hpccrdpy='ssh -Y hpccrdp'
+
+# ---------------------------- CSE machines ----------------------------
+# does not offer ssh-keygen stuffs, but this might work --
+# cat ~/.ssh/id_rsa.pub | ssh user@machine "mkdir ~/.ssh; cat >> ~/.ssh/authorized_keys"
+# login server
+# alias north='ssh north'
+# alias northx='ssh -X north'
+# for instructional use
+alias arctic='ssh arctic'
+alias arcticx='ssh -X arctic'
+# alias adriatic='ssh adriatic'
+# alias adriaticx='ssh -X adriatic'
+# for research use
+# alias pacific='ssh pacific'
+# alias pacificx='ssh -X pacific'
+alias black='ssh black'
+alias blackx='ssh -X black'
+# unix infrastructure servers
+# alias atlantic='ssh atlantic'
+# alias atlanticx='ssh -X atlantic'
+# alias baltic='ssh baltic'
+# alias bering='ssh bering'
+# alias sargasso='ssh sargasso'
+# alias reef='ssh reef'
+# alias lists='ssh lists'
+# alias mx='ssh mx'
+# alias sulu='ssh sulu'
+# alias coral='ssh coral'
+# Apple/MAC infrastructure server
+# alias juice='ssh juice'
+
+# for CSE232 TA grading and stuffs
+alias cse232ta='ssh ta232005@black'
+alias cse232tax='ssh -X ta232005@black'
+alias cse232tay='ssh -Y ta232005@black'
+
+# for CSE231 TA grading and stuffs
+# alias cse231ta='ssh ta231014@black'
+# alias cse231tax='ssh -X ta231014@black'
+# alias cse231tay='ssh -Y ta231014@black'
+# alias cse231ta='ssh ta231012@black'
+# alias cse231tax='ssh -X ta231012@black'
+# alias cse231tay='ssh -Y ta231012@black'
+alias cse231ta='ssh arctic'
+alias cse231tax='ssh -X arctic'
+alias cse231tay='ssh -Y arctic'
+
+# -------------------- DECS machines ----------------------------
+# DECS compute servers
+# offers ssh-keygen stuffs, can login without password
+alias compute01='ssh     compute01'
+alias compute01x='ssh -X compute01'
+alias compute01y='ssh -Y compute01'
+alias compute02='ssh     compute02'
+alias compute02x='ssh -X compute02'
+alias compute02y='ssh -Y compute02'
+alias compute03='ssh     compute03'
+alias compute03x='ssh -X compute03'
+alias compute03y='ssh -Y compute03'
+alias compute04='ssh     compute04'
+alias compute04x='ssh -X compute04'
+alias compute04y='ssh -Y compute04'
+alias compute05='ssh     compute05'
+alias compute05x='ssh -X compute05'
+alias compute05y='ssh -Y compute05'
+alias compute06='ssh     compute06'
+alias compute06x='ssh -X compute06'
+alias compute06y='ssh -Y compute06'
+alias compute07='ssh     compute07'
+alias compute07x='ssh -X compute07'
+alias compute07y='ssh -Y compute07'
+alias compute08='ssh     compute08'
+alias compute08x='ssh -X compute08'
+alias compute08y='ssh -Y compute08'
+alias compute09x='ssh -X compute09'
+alias compute09y='ssh -Y compute09'
+alias compute09='ssh     compute09'
+alias compute10x='ssh -X compute10'
+alias compute10y='ssh -Y compute10'
+alias compute10='ssh     compute10'
+
+# ------------- computeuse on the decs machies ------------
+_computeuse()
+{
+    if [[ "$hostname" == *"compute"* ]]; then
+        computeuse.pl;
+    else
+        ssh compute01 '$HOME/.sys-utils/bin/computeuse.pl';
+    fi
+}
+alias computeuse='_computeuse'
+
+# ------------- MSU VPN using pulse secure ----------------
+alias msuvpn='/usr/local/pulse/pulseUi'
+
+
+# this is the end of .msu

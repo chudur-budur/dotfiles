@@ -1,0 +1,175 @@
+#!/bin/bash
+
+# ~/.gmu: executed by bash(1) for non-login shells.
+# This is sourced to refresh some of the application 
+# specific customized env variables. Although this is
+# automatically by the ~/.bashrc, however you can also
+# source it yourself, in that case you need to disable
+# the load command in the ~/.bashrc --
+#
+#	if [ -f ~/.gmu ]; then
+#		. ~/.gmu
+#	fi
+
+# -------------------------- ECJ ---------------------------------------
+if [ -d "$HOME/kat/research/ecj-libs" ]; then
+	ECJ_LIBS=$HOME/kat/research/ecj-libs ;
+elif [ -d "/media/$USER/data/research/ecj-libs" ]; then
+	ECJ_LIBS=/media/$USER/data/research/ecj-libs;
+fi
+if [ -d "$ECJ_LIBS" ]; then
+	for i in $ECJ_LIBS/*.jar; 
+	do
+		_augment CLASSPATH "$i";
+	done
+    if [ -d "$HOME/kat/research/ecj/ecj" ]; then
+		ECJ_PATH=$HOME/kat/research/ecj/ecj;
+    elif [ -d "/media/$USER/data/research/ecj/ecj" ]; then
+		ECJ_PATH=/media/$USER/data/research/ecj/ecj;
+	fi
+	_augment CLASSPATH "$ECJ_PATH";
+fi
+
+# -------------------------- MASON -------------------------------------
+MASON_LIBS=$ECJ_LIBS; # We are not including this.
+
+JMF_DIR_NAME=`ls $installdir/ | grep JMF`
+JMF_HOME=$installdir/$JMF_DIR_NAME;
+JMF_LIBS=$JMF_HOME/lib;
+if [ -n "$JMF_DIR_NAME" ] && [ -d "$JMF_LIBS" ]; then
+	for i in $JMF_LIBS/*.jar; 
+	do
+		_augment CLASSPATH "$i";
+	done
+fi
+JMF_BIN=$JMF_HOME/bin;
+if [ -d "$JMF_BIN" ]; then
+	_augment PATH "$JMF_BIN";
+fi
+
+j3dlibs=$JRE_HOME/lib/ext;
+if [ -d "$j3dlibs" ]; then
+	for i in $j3dlibs/*.jar; 
+	do
+		_augment CLASSPATH "$i";
+	done
+fi
+
+MASON_PATH=/media/$USER/data/research/mason/mason;
+if [ -d "$MASON_PATH" ]; then
+	_augment CLASSPATH "$MASON_PATH";
+fi
+
+# -------------------------- Bean Shell --------------------------------
+beanshell_jar_name=`ls $installdir/ | grep bsh`
+beanshell_var=${beanshell_jar_name%.*}
+beanshellpath=$installdir/"$beanshell_var".jar;
+if [ -f "$beanshellpath" ]; then
+	_augment CLASSPATH "$beanshellpath";
+fi
+
+# -------------------------- All GMU RA's ----------------------------------
+# For meta-ea stuffs
+# META_EA_PATH=/media/$USER/data/RA/meta-ga/mega-sweep/java/ecj;
+# CLASSPATH=$CLASSPATH:$META_EA_PATH;
+
+# For Harmony stuffs
+# HARMONYPATH=/media/$USER/data/research/harmony;
+# _augment CLASSPATH $HARMONYPATH;
+
+# ---------------------- All GMU Courses -------------------------------
+# For CS659, Data Mining 
+# WEKA_JAR=/media/$USER/data/gmu-courses/cs659-dataMining/weka-3-6-9/weka.jar; 
+# DMNBTEXT_JAR=/home/$USER/wekafiles/packages/DMNBtext/DMNBtext.jar;
+# BLR_JAR=/home/$USER/wekafiles/packages/bayesianLogisticRegression/bayesianLogisticRegression.jar;
+# LIBSVM_JAR=/home/$USER/wekafiles/packages/LibSVM/LibSVM.jar;
+# LIBLINEAR_JAR=/home/$USER/wekafiles/packages/LibLINEAR/LibLINEAR.jar;
+# SPARSEGEN_JAR=/home/$USER/wekafiles/packages/SparseGenerativeModel/SparseGenerativeModel.jar;
+# CLASSPATH=$CLASSPATH:$WEKA_JAR:$DMNBTEXT_JAR:$BLR_JAR:$LIBSVM_JAR:$LIBLINEAR_JAR:$SPARSEGEN_JAR;
+
+# For CS685, Robotics
+# MAIN_SRC=/media/$USER/data/GMU_Courses/CS685_IntelliSysRobotics/projects/FinalProject/src;
+# CRICKETD_JAR=/media/$USER/data/GMU_Courses/CS685_IntelliSysRobotics/projects/FinalProject/src/hardware/crickets/lib/cricketdaemon.jar;
+# GETOPT_JAR=/media/$USER/data/GMU_Courses/CS685_IntelliSysRobotics/projects/FinalProject/src/hardware/crickets/lib/gnu.getopt.jar;
+# JAMA_JAR=/media/$USER/data/GMU_Courses/CS685_IntelliSysRobotics/projects/FinalProject/src/hardware/crickets/lib/Jama-1.0.1.jar;
+# PLOT_JAR=/media/$USER/data/GMU_Courses/CS685_IntelliSysRobotics/projects/FinalProject/src/hardware/crickets/lib/plot.jar;
+# MASON_JAR=/media/$USER/data/MASTools/mason-repo/mason/jar/mason.16.jar;
+# CLASSPATH=$CLASSPATH:$MAIN_SRC:$CRICKETD_JAR:$GETOPT_JAR:$JAMA_JAR:$PLOT_JAR:$MASON_JAR;
+
+# For SWE645, apache tomcat, struts2, glassfish, jboss etc.
+# CATALINA_HOME=/home/$USER/apache-tomcat-7.0.42; 
+# GLASSFISH_HOME=/home/$USER/glassfish4/glassfish;
+# JBOSS_HOME=/home/$USER/wildfly-8.0.0.Alpha4;
+# PATH=$PATH:$CATALINA_HOME/bin:$GLASSFISH_HOME/bin:$JBOSS_HOME/bin;
+
+# CS706, for Java-Thread-Affinity
+# JTA_LIB_PATH=/media/$USER/$USER/data/gmu-courses/cs706-conc-soft-systems/project/java-thread-affinity-repo/target/classes/com/higherfrequencytrading/affinity/native/Linux/amd64/libaffinity.so;
+# LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$JTA_LIB_PATH;
+# JTA_CLASSPATH=/media/$USER/$USER/data/gmu-courses/cs706-conc-soft-systems/project/java-thread-affinity-repo/target/classes:/media/$USER/$USER/data/gmu-courses/cs706-conc-soft-systems/project/java-thread-affinity-repo/target/test-classes;
+# CLASSPATH=$CLASSPATH:$JTA_CLASSPATH;
+# JNA_LIBS=/media/$USER/$USER/data/gmu-courses/cs706-conc-soft-systems/project/jnalibs/*;
+# CLASSPATH=$CLASSPATH:$JNA_LIBS;
+
+# for software dev course
+# -------------------------- MySQL -------------------------------------
+# Custom variables for MySQL setup.
+MYSQL_HOME=/usr/local/mysql;
+if [ -d "$MYSQL_HOME" ]; then
+    PATH=$PATH:$MYSQL_HOME/bin ; 
+fi
+
+# Now, export them all --
+export JMF_HOME;
+# export CATALINA_HOME;
+# export GLASSFISH_HOME;
+
+# opens bean shell
+alias bsh='java -cp '$CLASSPATH' bsh.Interpreter'
+# java decompiler gui
+alias jdgui='sudo /opt/jd-gui/jd-gui'
+
+# -------------------- all gmu course related stuff --------------------
+
+# for cs659: theory and applications of data mining course at gmu 
+# this is for weka
+alias weka='java -Xmx512M -cp .:'$CLASSPATH' weka.gui.GUIChooser'
+
+# for swe645: component based sw development course at gmu
+# local MySQL
+alias mysql-start='sudo /usr/local/mysql/support-files/mysql.server start'
+alias mysql-status='sudo /usr/local/mysql/support-files/mysql.server status'
+alias mysql-stop='sudo /usr/local/mysql/support-files/mysql.server stop'
+alias mysql-client-root='mysql -u root -p'
+alias mysql-client='mysql -u '$USER' -p'
+# this is for apache tomcat
+alias tmd='$CATALINA_HOME/bin/startup.sh'
+alias tms='$CATALINA_HOME/bin/shutdown.sh'
+alias tmc='ps -ef | grep tomcat'
+# this is for glassfish
+alias gfd='asadmin start-domain --verbose'
+alias gfs='asadmin stop-domain domain1'
+# this is for JBoss
+alias jbd='standalone.sh --server-config=standalone-ha.xml'
+alias jbs='jboss-cli.sh --connect command=:shutdown'
+
+# for cs880: mutlirobotics course at gmu
+# this is for botball KISS IDE
+alias kiss='/media/'$USER'/data/gmu-courses/cs880-multirobotics/botball/kiss/trunk/deploy/KISS'
+
+# -------------------- GMU cluster/machine accesses --------------------
+#
+# hydra cluster
+alias hydra='ssh atalukde@hydra.cs.gmu.edu'
+alias hydrax='ssh -X atalukde@hydra.cs.gmu.edu'
+# cs cluster
+alias cs1='ssh atalukde@cs1.cs.gmu.edu'
+alias cs1x='ssh -X atalukde@cs1.cs.gmu.edu'
+
+# zeus cluster access for SWE645
+# Oracle access, type: atalukde@zeus:~$ sqlplus
+alias zeus='ssh atalukde@zeus.vse.gmu.edu -v'
+
+# VPN connection to gmu
+# Use GMU ID/PW (i.e. atalukde/************)
+alias vpngmu='sudo openvpn --config ~/vpn.vse.gmu.edu.ovpn'
+

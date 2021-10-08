@@ -1,0 +1,250 @@
+#!/bin/bash
+
+# ~/.msuhpcc: executed by bash(1) for non-login shells.
+# This is sourced to refresh some of the application 
+# specific customized env variables. Although this is
+# automatically by the ~/.bashrc, however you can also
+# source it yourself, in that case you need to disable
+# the load command in the ~/.bashrc --
+#
+#	if [ -f ~/.msuhpcc ]; then
+#		. ~/.msuhpcc
+#	fi
+
+# Most of my craps are installed in /opt, but might change if host is different
+hostname=$HOSTNAME ;
+if [[ $hostname =~ gateway ]]; then
+	installdir="/opt/software" ;
+fi
+
+# if a variable 'bigstr' is empty, then add the string 'substr' to it,
+# if it does not contain the string 'substr', then append 'substr' to it
+_augment()
+{
+	target=$1
+	bigstr=${!1}
+	substr=$2
+	
+	if [ -z "$bigstr" ]; then
+		# declare -g -- "$target=$substr"
+		eval "$target=\$substr"
+	elif [[ $bigstr != "$substr" 
+		&& $bigstr != *:"$substr" 
+		&& $bigstr != "$substr":* 
+		&& $bigstr != *:"$substr":* ]]; then
+		# declare -g -- "$target=$bigstr:$substr"
+		eval "$target=\$bigstr:\$substr"
+	fi
+}
+
+_removedup()
+{
+	path=$1 ;
+	IFS=':' read -ra tokens <<< "$path" ;
+	declare -A uniq ;
+	for i in ${tokens[@]}; do uniq[$i]=1; done 
+	concat=`printf '%s:' "${!uniq[@]}"` ;
+	echo "${concat%?}" ;
+}
+
+#------------------------ check if __git_ps1 works --------------------------------------------
+gitps1="no"
+if [ -n $(command -v __git_ps1) ]; then
+    gitps1="yes"
+fi
+
+# ---------------------- A fancy color prompt ------------------------------------------------
+if [ "$color_prompt" = "yes" ]; then
+    if [[ "$hostname" == *gateway* ]] || [[ "$hostname" == *intel* ]] || [[ "$hostname" == *amd* ]]; then
+        if [[ "$gitps1" == "no" ]]; then
+            export PS1='\[\033[0;32m\]\[\033[0;32m\]\u\[\033[0;35m\]@\[\033[0;36m\]\h:\[\033[0;34m\]\]\w\n\[\033[0;32m\]└─\[\033[0;32m\]«†»>\[\033[0m\] '
+        else
+            export PS1='\[\033[0;32m\]\[\033[0;32m\]\u\[\033[0;35m\]@\[\033[38;5;033m\]\h:\[\033[0;34m\]\]\w\n\[\033[0;32m\]└─\[\033[0;32m\]«†»\[\033[38;5;003m\]$(__git_ps1 | sed -r "s/^[[:space:]]*//")\[\033[0;32m\]>\[\033[0m\] '
+        fi
+    fi
+fi
+
+#--------------------------------- git aware prompt --------------------------------------------
+gaprompt="$HOME/.bash/git-aware-prompt";
+if [ -e "$HOME/.bash/git-aware-prompt" ]; then
+	export GITAWAREPROMPT="$HOME/.bash/git-aware-prompt";
+	source "${GITAWAREPROMPT}/main.sh"
+fi
+
+# path to user's executables
+[ -d "$HOME/.sys-utils/bin" ] && _augment PATH "$HOME/.sys-utils/bin"
+[ -d "$HOME/bin" ] && _augment PATH "$HOME/bin" ;
+# Save the LOADEDMODULES into LMOD_SYSTEM_DEFAULT_MODULES
+[ ! -z $LOADEDMODULES ] && LMOD_SYSTEM_DEFAULT_MODULES=$LOADEDMODULES ;
+
+# -------------------------- intel stuffs ------------------------------------
+intelcc=$HOME/opt/intel/cc/compiler/lib/intel64 ;
+intelfort=$HOME/opt/intel/fortran/compiler/lib/intel64 ;
+# intelmpirt=/opt/intel/mpirt/bin/intel64 ;
+if [ -d "$intelcc" ]; then
+	_augment PATH "$intelcc" ;
+	_augment LD_LIBRARY_PATH "$intelcc" ;
+	_augment LIBRARY_PATH "$intelcc" ;
+	_augment PATH "$intelfort" ;
+	_augment LD_LIBRARY_PATH "$intelfort" ;
+	_augment LIBRARY_PATH "$intelfort" ;
+fi
+
+# -------------------------- python stuffs ------------------------------------
+condahome=$HOME/opt/anaconda3 ;
+condabin=$condahome/bin ;
+if [ -d "$condabin" ]; then
+	_augment PATH "$condabin" ;
+    SSL_CERT_FILE=$condahome/ssl/cert.pem
+fi
+
+# ------------------------- virtualenv stuffs ----------------------------------
+virtualenvpath=$HOME/.local/bin
+if [ -d "$virtualenvpath" ]; then
+    _augment PATH "$virtualenvpath";
+fi
+
+# --------------------------- cuda stuffs --------------------------------------
+lib64path=/usr/lib64
+if [ -d "$lib64path" ]; then
+	_augment LD_LIBRARY_PATH "$lib64path" ;
+	_augment LIBRARY_PATH "$lib64path" ;
+fi
+
+libnvidiapath=/usr/lib64/nvidia
+if [ -d "$libnvidiapath" ]; then
+	_augment LD_LIBRARY_PATH "$libnvidiapath" ;
+	_augment LIBRARY_PATH "$libnvidiapath" ;
+    export CUDA_VISIBLE_DEVICES=0;
+fi
+
+# --------------------------- ant stuffs --------------------------------------
+antdirname=`ls $HOME/opt | grep ant`
+ANT_HOME=$HOME/opt/$antdirname;
+if [ ! -z "$antdirname" ] && [ -d "$ANT_HOME/bin" ]; then
+	_augment PATH "$ANT_HOME/bin";
+fi
+
+#------------------------ almost end of all env variable --------------------------------------
+# remove duplicate entries, if any --
+PATH=`_removedup "$PATH"` ;
+LIBRARY_PATH=`_removedup "$LIBRARY_PATH"` ;
+
+# Now, export them all --
+[[ ! -z $PATH ]] && export PATH;
+[[ ! -z $LIBRARY_PATH ]] && export LIBRARY_PATH;
+[[ ! -z $SSL_CERT_FILE ]] && export SSL_CERT_FILE;
+[[ ! -z $LMOD_SYSTEM_DEFAULT_MODULES ]] && export LMOD_SYSTEM_DEFAULT_MODULES;
+
+# some extra aliases to access the local compute nodes --
+# recommended
+alias amd20='ssh amd20'
+alias amd20x='ssh -X amd20'
+alias amd20y='ssh -Y amd20'
+alias amd20v100='ssh amd20v100'
+alias amd20v100x='ssh -X amd20v100'
+alias amd20v100y='ssh -Y amd20v100'
+alias intel14='ssh intel14'
+alias intel14x='ssh -X intel14'
+alias intel14y='ssh -Y intel14'
+alias intel16='ssh intel16'
+alias intel16x='ssh -X intel16'
+alias intel16y='ssh -Y intel16'
+alias intel18='ssh intel18'
+alias intel18x='ssh -X intel18'
+alias intel18y='ssh -Y intel18'
+# mic dev.
+alias intel14phi='ssh intel14phi'
+alias intel14phix='ssh -X intel14phi'
+alias intel14phiy='ssh -Y intel14phi'
+# gpu dev.
+alias intel14k20='ssh intel14k20'
+alias intel14k20x='ssh -X intel14k20'
+alias intel14k20y='ssh -Y intel14k20'
+alias intel16k80='ssh intel16k80'
+alias intel16k80x='ssh -X intel16k80'
+alias intel16k80y='ssh -Y intel16k80'
+
+# load some good tools/modules
+# modules for world-models
+_load_wm()
+{
+    module unload Python
+    module unload imkl
+    module unload Boost
+    module unload OpenBLAS
+    module unload ScaLAPACK
+    module load GCC/7.3.0-2.30
+    module laod GNU/7.3.0-2.30
+    module load OpenMPI/3.1.1-CUDA
+    module load Python/3.6.6
+    module load SWIG/3.0.12-Python-3.6.6
+    module load OpenBLAS
+    module load ScaLAPACK
+    module load Boost
+    module load imkl
+    module load CUDA/9.0.176
+    module load cuDNN/7.0.2-CUDA-9.0.176
+}
+
+# Looks like this is mode compatible with 
+# everything, specially with mpi4py
+_load_wm364()
+{
+    module load GCC/6.4.0-2.28
+    module load CUDA/9.0.176
+    module load SWIG/3.0.12-Python-3.6.4
+    module load cuDNN/7.0.2-CUDA-9.0.176
+}
+
+# modules for ece885
+_load_ece885()
+{
+	module try-load GNU/4.9
+	module try-load CMake/3.7.2
+	module try-load BLAS/3.6.0
+	module try-load openblas/0.2.15
+	module try-load LAPACK/3.7.0
+	module try-load cuDNN/6.0
+	module try-load CUDA/8.0
+	module unload Python/2.7.2
+}
+
+# A generic Python3 environment
+_load_py3()
+{
+    module try-load GCCcore/8.3.0
+    module try-load Python/3.8.3
+}
+
+_load_matlab2019b()
+{
+    module try-load MATLAB/2019b
+}
+
+# Some old stuffs that I don't use anymore.
+_load_old()
+{
+	module try-load CMake/3.7.2
+	module try-load Boost/1.51.0
+	module try-load BLAS/20110922
+	module try-load openblas/0.2.12
+	module try-load LAPACK/3.4.2b
+	module try-load ATLAS/3.10.2
+	module try-load netcdf-fortran/4.4.1-rc1
+	module try-load CUDA/7.5
+	module try-load cuDNN/5.0
+	module try-load SciPy/0.15.1
+	module try-load NumPy/1.9.2
+}
+
+modpath=$(echo $MODULEPATH);
+if [ -n "${modpath}" ]; then
+	module try-load powertools
+    alias lmodr='module reset'
+    alias lmodece885='_load_ece885'
+    alias lmodwm='_load_wm'
+    alias lmodwm364='_load_wm364'
+    alias lmodpy3='_load_py3'
+    alias lmodmatlab='_load_matlab2019b'
+fi

@@ -1,0 +1,420 @@
+#!/bin/bash
+
+# ~/.myenv: executed by bash(1) for non-login shells.
+# This is sourced to refresh some of the application 
+# specific customized env variables. Although this is
+# automatically by the ~/.bashrc, however you can also
+# source it yourself, in that case you need to disable
+# the load command in the ~/.bashrc --
+#
+#	if [ -f ~/.myenv ]; then
+#		. ~/.myenv
+#	fi
+
+# if a variable 'bigstr' is empty, then add the string 'substr' to it,
+# if it does not contain the string 'substr', then append 'substr' to it
+_augment()
+{
+	target=$1
+	bigstr=${!1}
+	substr=$2
+	
+	if [ -z "$bigstr" ]; then
+		# declare -g -- "$target=$substr"
+		eval "$target=\$substr"
+	elif [[ $bigstr != "$substr" 
+		&& $bigstr != *:"$substr" 
+		&& $bigstr != "$substr":* 
+		&& $bigstr != *:"$substr":* ]]; then
+		# declare -g -- "$target=$bigstr:$substr"
+		eval "$target=\$bigstr:\$substr"
+	fi
+}
+
+# remove duplicate substring from a bash env string
+_removedup()
+{
+	path=$1 ;
+    IFS=':' read -ra tokens <<< "$path" ;
+    uniq=($(tr ' ' '\n' <<< "${tokens[@]}" | sort -ru | tr '\n' ' '))
+    concat=`printf '%s:' "${uniq[@]}"` ;
+    echo "${concat%?}" ;
+}
+
+function colorgrid( )
+{
+    iter=16
+    while [ $iter -lt 52 ]
+    do
+        second=$[$iter+36]
+        third=$[$second+36]
+        four=$[$third+36]
+        five=$[$four+36]
+        six=$[$five+36]
+        seven=$[$six+36]
+        if [ $seven -gt 250 ];then seven=$[$seven-251]; fi
+
+        echo -en "\033[38;5;$(echo $iter)m█ "
+        printf "%03d" $iter
+        echo -en "   \033[38;5;$(echo $second)m█ "
+        printf "%03d" $second
+        echo -en "   \033[38;5;$(echo $third)m█ "
+        printf "%03d" $third
+        echo -en "   \033[38;5;$(echo $four)m█ "
+        printf "%03d" $four
+        echo -en "   \033[38;5;$(echo $five)m█ "
+        printf "%03d" $five
+        echo -en "   \033[38;5;$(echo $six)m█ "
+        printf "%03d" $six
+        echo -en "   \033[38;5;$(echo $seven)m█ "
+        printf "%03d" $seven
+
+        iter=$[$iter+1]
+        printf '\r\n'
+    done
+}
+alias cgrid='colorgrid'
+
+# Most of my craps are installed in /opt, but might change if host is different
+hostname=$HOSTNAME ;
+if [ "$hostname" = "kopashamsu" ]; then
+    [[ -d "/opt" ]] && installdir="/opt" ;
+elif [ "$hostname" = "kopashamsu.local" ]; then
+    [[ -d "$HOME/opt" ]] && installdir="$HOME/opt";
+fi
+[[ -z $installdir ]] && installdir="/tmp";
+
+# From now on, I'm putting my custom bin folder in $HOME/.bin
+# instead of /usr/local/bin
+localbin="$HOME/.bin"
+if [ -d "$HOME/.bin" ]; then
+    _augment PATH "$localbin"
+fi
+
+# snap directory bin
+if [ -d "/snap" ]; then
+	_augment PATH "/snap/bin"
+fi
+
+# some local bins, mostly for the remote servers
+if [ -d "$HOME/bin" ]; then
+	_augment PATH "$HOME/bin"
+fi
+if [ -d "/opt/bin" ]; then
+	_augment PATH "/opt/bin"
+fi
+
+# fixing vim backspace
+stty erase '^?' 2>/dev/null ; 
+
+# some x stuffs
+xrdb -v >/dev/null 2>&1
+if [[ "$?" != "127" ]]; then
+    if [[ -n "$DISPLAY" ]]; then
+        # this only works if the $DISPLAY variable is set.
+        if [ -f "$HOME/.Xdefaults" ]; then
+            xrdb -load ~/.Xdefaults ;
+        fi
+    fi
+fi
+
+# check if __git_ps1 works
+gitps1="no"
+if [ -n $(command -v __git_ps1) ]; then
+    gitps1="yes"
+fi
+	
+# A fancy prompt
+if [ "$color_prompt" = "yes" ]; then
+    # if my local machine
+    if [[ "$hostname" == "kopashamsu.local" ]]; then
+        if [[ "$gitps1" == "no" ]]; then
+            export PS1='\[\033[0;32m\]\[\033[0;32m\]\u\[\033[0;35m\]@\[\033[0;36m\]\h:\[\033[0;34m\]\]\w\n\[\033[0;32m\]└─\033[0;32m\]>>\[\033[0m\] '
+        else
+            export PS1='\[\033[0;32m\]\[\033[0;32m\]\u\[\033[0;35m\]@\[\033[0;36m\]\h:\[\033[0;34m\]\]\w\n\[\033[0;32m\]└─\[\033[38;5;003m\]$(__git_ps1 | sed -e "s/^[[:space:]]*//")\[\033[0;32m\]>>\[\033[0m\] '
+        fi
+        # variant:
+        # export PS1='\[\033[0;32m\]\[\033[0m\033[0;32m\]\u\[\033[0;35m\]@\[\033[0;36m\]\h:\[\033[0;34m\]\]\w\n\[\033[0;32m\]└─\[\033[0m\033[0;32m\]\[\033[0;32m\]\$\[\033[0m\033[0;32m\]▶\[\033[0m\] '
+        # original:
+        # export PS1='\[\033[0;32m\]\[\033[0m\033[0;32m\]\u\[\033[0;36m\] @ \[\033[0;36m\]\h \w\[\033[0;32m\]$(__git_ps1)\n\[\033[0;32m\]└─\[\033[0m\033[0;32m\] \$\[\033[0m\033[0;32m\] ▶\[\033[0m\] '
+        # Some fancy ascii chars
+        # ¡™£¢∞§¶•ªº–≠⁄€›ﬁﬂ‡°·‚—±œ∑®†¥¨ˆøπ“‘«Œ„´‰ˇÁ¨ˆØ∏”’»åß∂ƒ©˙∆˚¬…æÅÍÎÏ˝ÓÔÒÚÆΩ≈ç√∫˜µ≤≥÷¸˛Ç◊ı˜Â¯˘¿
+    fi
+else
+	export PS1="\${debian_chroot:+(\$debian_chroot)}\u@\h:\w\[$txtcyn\][\$git_branch]\[$txtred\]\$git_dirty\[$txtrst\]\$ ";
+fi
+
+# some git stuffs
+# set the gitignore_global file, as I can't directly expand
+# shell variable in the gitignore file.
+git >/dev/null 2>&1
+if [ "$?" = "1" ]; then
+	git config --global core.excludesfile ~/.gitignore_global 
+fi
+
+# git auto completion 
+if [ -f "~/.git-completion.bash" ]; then
+    source ~/.git-completion.bash;
+fi
+
+# git aware prompt 
+gaprompt="$HOME/.bash/git-aware-prompt";
+if [ -e "$HOME/.bash/git-aware-prompt" ]; then
+	export GITAWAREPROMPT="$HOME/.bash/git-aware-prompt";
+	source "${GITAWAREPROMPT}/main.sh"
+fi
+
+# lightdm env variables.
+lightdblib=/usr/lib/lightdm/lightdm;
+if [ -d "$lightdblib" ]; then
+	_augment PATH "$lightdblib";
+fi
+
+# some gtk error stuffs
+gtk2stuffs=/usr/lib/x86_64-linux-gnu/gtk-2.0/modules;
+if [ -d "$gtk2stuffs" ]; then
+	for i in $gtk2stuffs/*.so; do
+		if [ -f "$i" ]; then
+			_augment GTK_PATH "$i";
+		fi
+	done
+fi
+gtk3stuffs=/usr/lib/x86_64-linux-gnu/gtk-3.0/modules; 
+if [ -d "$gtk3stuffs" ]; then
+	for i in $gtk3stuffs/*.so; do
+		if [ -f "$i" ]; then
+			_augment GTK_PATH "$i";
+		fi
+	done
+fi
+
+# ------------------- OpenSSL settings for mac ------------------------
+openssl=/usr/local/opt/openssl@1.1;
+if [ -d "$openssl/bin" ]; then
+    _augment PATH "$openssl/bin";
+fi
+if [ -d "$openssl/lib" ]; then
+    _augment LDFLAGS "-L$openssl/lib"
+fi
+if [ -d "$openssl/include" ]; then
+    _augment CPPFLAGS "-I$openssl/include"
+fi
+if [ -d "$openssl/lib/pkgconfig" ]; then
+    _augment PKG_CONFIG_PATH "$openssl/lib/pkgconfig"
+fi
+if [ -f "/usr/local/etc/openssl@1.1/cert.pem" ]; then
+    SSL_CERT_FILE=/usr/local/etc/openssl@1.1/cert.pem
+fi
+
+# -------------------------- Adobe Reader ------------------------------
+# lib32path=/usr/lib32;
+lib32path=/usr/lib/x86_64-linux-gnu;
+if [ -d "$lib32path" ]; then
+	_augment LD_LIBRARY_PATH $lib32path;
+fi
+
+# -------------------------- Java --------------------------------------
+# there may be multiple jdk installations, so ...
+jdkdirname=`ls $installdir/ | grep jdk | sort -r | head -n 1`
+if [ -n "$jdkdirname" ]; then
+	JAVA_HOME=$installdir/$jdkdirname;
+	if [ -d "$JAVA_HOME/bin" ]; then	
+		_augment PATH "$JAVA_HOME"/bin;
+
+		JRE_HOME=$JAVA_HOME/jre;
+		_augment PATH "$JRE_HOME"/bin;
+
+		javalibs=$installdir/$jdkdirname/lib;
+		for i in $javalibs/*.jar; do
+			_augment CLASSPATH "$i";
+		done
+		jrelibs=$JRE_HOME/lib;
+		for i in $jrelibs/*.jar; do
+			_augment CLASSPATH "$i";
+		done
+	fi
+fi
+
+#--------------------------- ant ---------------------------------------
+antdirname=`ls $installdir/ | grep ant`
+if [[ ! -z "$antdirname" ]] ; then
+    ANT_HOME=$installdir/$antdirname;
+    if [ -d "$ANT_HOME/bin" ] ; then
+	    _augment PATH "$ANT_HOME/bin";
+    fi
+fi
+
+#--------------------------- maven -------------------------------------
+mavendirname=`ls $installdir/ | grep maven`
+mavenhome=$installdir/$mavendirname;
+if [ -n "$mavendirname" ] && [ -d "$mavenhome/bin" ]; then
+	_augment PATH "$mavenhome/bin";
+fi
+
+#--------------------------- gradle ---------------------------------------
+gradledirname=`ls $installdir/ | grep gradle`
+GRADLE_HOME=$installdir/$gradledirname;
+if [ -n "$gradledirname" ] && [ -d "$GRADLE_HOME/bin" ]; then
+	_augment PATH "$GRADLE_HOME/bin";
+fi
+
+#-------------------- apache commons math -----------------------------
+commonsmathdirname=`ls $installdir/ | grep commons-math`
+apachecommonsmathhome=$installdir/$commonsmathdirname;
+if [ -n "$commonsmathdirname" ] && [ -d "$apachecommonsmathhome" ]; then
+	_augment CLASSPATH "$apachecommonsmathhome"/"$commonsmathdirname".jar;
+fi
+
+#--------------------------- junit ---------------------------------------
+junit_dir_name=`ls $installdir/ | grep junit`
+junithome=$installdir/$junit_dir_name;
+if [ -n "$junit_dir_name" ] && [ -d "$junithome" ]; then
+	for i in $junithome/*.jar; do
+		_augment CLASSPATH "$i";
+	done
+fi
+
+# -------------------------- Lisp --------------------------------------
+# get the current SBCL version and path
+sbcl_dir_name=`ls $installdir/ | grep sbcl`
+lisp_path=$installdir/$sbcl_dir_name;
+if [ -n "$sbcl_dir_name" ] && [ -d "$lisp_path" ]; then
+	_augment PATH "$lisp_path";
+fi
+
+# -------------------------- LaTeX/latex -------------------------------------
+# Custom variables for TeXLive 2011 environments, after 
+# MANPATH configuration needs to be done in /etc/manpath.config
+# Please note, $MANPATH is not loaded during startup, so you can
+# refresh it here.
+# Furthermore, I have adopted a new and convenient symbolic link for the TeXLive:
+#	 sudo ln -s /usr/local/texlive/2013/bin/x86_64-linux/* $installdir/texlive/bin
+#	 sudo ln -s /usr/local/texlive/2013/texmf-dist/doc/man/* $installdir/texlive/man
+#	 sudo ln -s /usr/local/texlive/2013/texmf-dist/doc/info/* $installdir/texlive/info
+##
+latex_dir_name=`ls $installdir/ | grep texlive`
+if [ -n "$latex_dir_name" ]; then
+    tlbinpath=`find $installdir/texlive -maxdepth 4 -name "latex" -executable | grep bin | sort -r | head -n 1 | sed 's%/[^/]*$%%'`
+    if [ -d "$tlbinpath" ]; then
+		_augment PATH "$tlbinpath";
+		# Not sure do we need to add these two the environment variables.
+		# Need to investigate more -- looks like this is not necessary, TeXLive
+		# manpath mapping seems to be good enough
+        TLMANPATH=`find $installdir/texlive -maxdepth 4 -name "man" | grep "texmf-dist/doc"`
+        if [ -d "$TLMANPATH" ]; then
+            _augment MANPATH $TLMANPATH ;
+        fi
+        TLINFOPATH=`find $installdir/texlive -maxdepth 4 -name "info" | grep "texmf-dist/doc"`
+        if [ -d "$TLINFOPATH" ]; then
+            _augment INFOPATH $TLINFOPATH ;
+        fi
+	fi
+fi
+
+#--------------------------- python ------------------------------------
+# add stuffs to PYTHONPATH if needed
+# pip3binpath="$HOME/.local/bin"
+# if [ -d "$pip3binpath" ]; then
+#     _augment PATH "$pip3binpath" ;
+# fi
+# pip3binpath="$HOME/Library/Python/3.8/bin"
+# if [ -d "$pip3binpath" ]; then
+#     _augment PATH "$pip3binpath" ;
+# fi
+
+# -------------------------- Qt5 ----------------------------------------
+QT_DIR_NAME=`ls $installdir/ | grep Qt`
+QT_VER=`echo "$QT_DIR_NAME" | tail -c +3`
+QTHOME=$installdir/$QT_DIR_NAME;
+if [ -n "$QT_DIR_NAME" ] && [ -n "$QT_VER" ]; then
+	QTDIR=$QTHOME/$QT_VER/gcc_64;
+	if [ -d "$QTDIR" ]; then
+		QTBINPATH=$QTDIR/bin;
+		_augment PATH "$QTBINPATH";
+		QTLIBPATH=$QTDIR/lib;
+		_augment LD_LIBRARY_PATH "$QTLIBPATH";
+
+		QTCREATORPATH=$QTHOME/Tools/QtCreator;
+		QTCREATORBINPATH=$QTCREATORPATH/bin;
+		_augment PATH "$QTCREATORBINPATH";
+		QTCREATORLIBPATH=$QTCREATORPATH/lib;
+		_augment LD_LIBRARY_PATH "$QTCREATORLIBPATH";
+		QMAKESPEC=$QTDIR/mkspecs/linux-g++-64;
+	fi
+fi
+
+# -------------------------- matlab/MATLAB ------------------------------------
+MATLAB_DIR_NAME=`ls "$installdir/" | grep 'MATLAB' | head -n 1`;
+if [ -n "$MATLAB_DIR_NAME" ]; then
+	MATLAB_VERSION=`ls "$installdir/$MATLAB_DIR_NAME/" | \
+		grep 'R[0-9]\{4\}[a-z]\{1\}$' | sort -r | head -n 1`
+	if [ -n "$MATLAB_VERSION" ]; then
+		MATLAB_BIN_PATH="$installdir/$MATLAB_DIR_NAME/$MATLAB_VERSION/bin" ;
+		_augment PATH "$MATLAB_BIN_PATH" ;
+	fi
+fi
+OSXMATLABPATH="/Applications/MATLAB_R2020b.app/bin";
+if [ -d "$OSXMATLABPATH" ]; then
+    _augment PATH $OSXMATLABPATH;
+fi
+
+# -------------------------- GoPanda ------------------------------------
+gobin=/opt/GoPanda2 ;
+if [ -d "$gobin" ]; then
+	_augment PATH "$gobin" ;
+fi
+
+# -------------------------- Zotero stuffs -----------------------------
+zoteropath=/opt/Zotero_linux-x86_64
+if [ -d "$zoteropath" ]; then
+    _augment PATH "$zoteropath" ;
+fi
+
+# ---------------------------- rust stuffs -----------------------------
+cargobinpath=$HOME/.cargo/bin
+if [ -d "$cargobinpath" ]; then
+    _augment PATH "$cargobinpath" ;
+fi
+
+# --------------------------- pyenv stuffs -----------------------------
+PYENV_ROOT="$HOME/.pyenv"
+if [ -d "$PYENV_ROOT" ]; then
+    export PYENV_ROOT
+    _augment PATH "$PYENV_ROOT/bin:$PATH"
+    # pyenv init, put this in .profile, .bash_profile, or .bashrc
+    # don't put this in .myenv since it needs pyenv env variables
+    # if command -v pyenv 1>/dev/null 2>&1; then
+    #     eval "$(pyenv init -)"
+    # fi
+fi
+
+#------------------------ almost end of all env variable --------------------------------------
+# remove duplicate entries, if any --
+PATH=`_removedup "$PATH"` ;
+LD_LIBRARY_PATH=`_removedup "$LD_LIBRARY_PATH"` ;
+LDFLAGS=`_removedup "$LDFLAGS"` ;
+CPPFLAGS=`_removedup "$CPPFLAGS"` ;
+GTK_PATH=`_removedup "$GTK_PATH"` ;
+CLASSPATH=`_removedup "$CLASSPATH"` ;
+PYTHONPATH=`_removedup "$PYTHONPATH"` ;
+PKG_CONFIG_PATH=`_removedup "$PKG_CONFIG_PATH"` ;
+
+# Now, export them all --
+[[ ! -z $PATH ]] && export PATH;
+[[ ! -z $LD_LIBRARY_PATH ]] && export LD_LIBRARY_PATH;
+[[ ! -z $LDFLAGS ]] && export LDFLAGS;
+[[ ! -z $CPPFLAGS ]] && export CPPFLAGS;
+[[ ! -z $SSL_CERT_FILE ]] && export SSL_CERT_FILE;
+[[ ! -z $GTK_PATH ]] && export GTK_PATH;
+[[ ! -z $CLASSPATH ]] && export CLASSPATH;
+[[ ! -z $PYTHONPATH ]] && export PYTHONPATH;
+[[ ! -z $JAVA_HOME ]] && export JAVA_HOME;
+[[ ! -z $JRE_HOME ]] && export JRE_HOME;
+[[ ! -z $ANT_HOME ]] && export ANT_HOME;
+[[ ! -z $QTDIR ]] && export QTDIR;
+[[ ! -z $QMAKESPEC ]] && export QMAKESPEC;
+[[ ! -z $PKG_CONFIG_PATH ]] && export PKG_CONFIG_PATH ;
+[[ ! -z $MANPATH ]] && export MANPATH;
+[[ ! -z $INFOPATH ]] && export INFOPATH;
+
+# this is the end of .myenv

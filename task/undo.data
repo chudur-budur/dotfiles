@@ -1,0 +1,111 @@
+time 1447280343
+new [description:"dummy task later" entry:"1447280343" status:"pending" uuid:"843cfe77-d59f-4551-99e7-b117eaf901c6"]
+---
+time 1447280359
+old [description:"dummy task later" entry:"1447280343" status:"pending" uuid:"843cfe77-d59f-4551-99e7-b117eaf901c6"]
+new [description:"dummy task later" end:"1447280357" entry:"1447280343" modified:"1447280359" status:"deleted" uuid:"843cfe77-d59f-4551-99e7-b117eaf901c6"]
+---
+time 1447309857
+new [description:"do opposition crap" entry:"1447309857" status:"pending" uuid:"7f15e042-2047-4281-9ba3-4b501bb987ff"]
+---
+time 1447309977
+new [description:"cse824 paper writing" entry:"1447309977" status:"pending" uuid:"3d4bde55-5980-4866-8427-a011b4fb4913"]
+---
+time 1447309988
+new [description:"caffe tutorial" entry:"1447309988" status:"pending" uuid:"4a0ad5bb-c468-4cc9-8201-8383f3115389"]
+---
+time 1447359308
+new [description:"proj06 grade" entry:"1447359308" status:"pending" uuid:"cc031549-6644-4087-aaf4-156735e56156"]
+---
+time 1447359333
+new [description:"dograde script fix" entry:"1447359333" status:"pending" uuid:"2f30b8e3-1aa0-4bbf-bdc4-74b4da9a6977"]
+---
+time 1447359350
+new [description:"prepare proj06 dograde" entry:"1447359350" status:"pending" uuid:"a99c5948-f208-4f3b-a32c-941e4df3881a"]
+---
+time 1447359384
+old [description:"proj06 grade" entry:"1447359308" status:"pending" uuid:"cc031549-6644-4087-aaf4-156735e56156"]
+new [description:"proj06 grade" end:"1447359382" entry:"1447359308" modified:"1447359384" status:"deleted" uuid:"cc031549-6644-4087-aaf4-156735e56156"]
+---
+time 1447359405
+old [description:"prepare proj06 dograde" entry:"1447359350" status:"pending" uuid:"a99c5948-f208-4f3b-a32c-941e4df3881a"]
+new [description:"prepare proj06 dograde" end:"1447359404" entry:"1447359350" modified:"1447359405" status:"deleted" uuid:"a99c5948-f208-4f3b-a32c-941e4df3881a"]
+---
+time 1462063504
+old [description:"do opposition crap" entry:"1447309857" status:"pending" uuid:"7f15e042-2047-4281-9ba3-4b501bb987ff"]
+new [description:"do opposition crap" end:"1462063504" entry:"1447309857" modified:"1462063504" status:"completed" uuid:"7f15e042-2047-4281-9ba3-4b501bb987ff"]
+---
+time 1462063513
+old [description:"cse824 paper writing" entry:"1447309977" status:"pending" uuid:"3d4bde55-5980-4866-8427-a011b4fb4913"]
+new [description:"cse824 paper writing" end:"1462063513" entry:"1447309977" modified:"1462063513" status:"completed" uuid:"3d4bde55-5980-4866-8427-a011b4fb4913"]
+---
+time 1462063527
+old [description:"caffe tutorial" entry:"1447309988" status:"pending" uuid:"4a0ad5bb-c468-4cc9-8201-8383f3115389"]
+new [description:"caffe tutorial" end:"1462063527" entry:"1447309988" modified:"1462063527" status:"completed" uuid:"4a0ad5bb-c468-4cc9-8201-8383f3115389"]
+---
+time 1462063539
+old [description:"dograde script fix" entry:"1447359333" status:"pending" uuid:"2f30b8e3-1aa0-4bbf-bdc4-74b4da9a6977"]
+new [description:"dograde script fix" end:"1462063539" entry:"1447359333" modified:"1462063539" status:"completed" uuid:"2f30b8e3-1aa0-4bbf-bdc4-74b4da9a6977"]
+---
+time 1463189137
+new [description:"task1" entry:"1463189137" status:"pending" uuid:"0a9862d9-39f1-42b4-89c3-43aa1f28529f"]
+---
+time 1463189157
+old [description:"task1" entry:"1463189137" status:"pending" uuid:"0a9862d9-39f1-42b4-89c3-43aa1f28529f"]
+new [annotation_1463189153:"task1" description:"task1" end:"1463189153" entry:"1463189137" modified:"1463189157" status:"deleted" uuid:"0a9862d9-39f1-42b4-89c3-43aa1f28529f"]
+---
+time 1463189166
+old [description:"dograde script fix" end:"1462063539" entry:"1447359333" modified:"1462063539" status:"completed" uuid:"2f30b8e3-1aa0-4bbf-bdc4-74b4da9a6977"]
+new [annotation_1463189157:"task1" description:"dograde script fix" end:"1462063539" entry:"1447359333" modified:"1463189166" status:"deleted" uuid:"2f30b8e3-1aa0-4bbf-bdc4-74b4da9a6977"]
+---
+time 1463189168
+old [description:"caffe tutorial" end:"1462063527" entry:"1447309988" modified:"1462063527" status:"completed" uuid:"4a0ad5bb-c468-4cc9-8201-8383f3115389"]
+new [annotation_1463189166:"task1" description:"caffe tutorial" end:"1462063527" entry:"1447309988" modified:"1463189168" status:"deleted" uuid:"4a0ad5bb-c468-4cc9-8201-8383f3115389"]
+---
+time 1463189171
+old [description:"cse824 paper writing" end:"1462063513" entry:"1447309977" modified:"1462063513" status:"completed" uuid:"3d4bde55-5980-4866-8427-a011b4fb4913"]
+new [annotation_1463189168:"task1" description:"cse824 paper writing" end:"1462063513" entry:"1447309977" modified:"1463189171" status:"deleted" uuid:"3d4bde55-5980-4866-8427-a011b4fb4913"]
+---
+time 1463189172
+old [description:"do opposition crap" end:"1462063504" entry:"1447309857" modified:"1462063504" status:"completed" uuid:"7f15e042-2047-4281-9ba3-4b501bb987ff"]
+new [annotation_1463189171:"task1" description:"do opposition crap" end:"1462063504" entry:"1447309857" modified:"1463189172" status:"deleted" uuid:"7f15e042-2047-4281-9ba3-4b501bb987ff"]
+---
+time 1463189208
+new [description:"apply cse travel grant" entry:"1463189208" status:"pending" uuid:"5b4e37d3-6d80-4822-b2b3-aad00ac6d270"]
+---
+time 1463189218
+new [description:"apply beacon travel grant" entry:"1463189218" status:"pending" uuid:"c024f1aa-1d74-4cd2-8b49-bd470d3279e9"]
+---
+time 1463189242
+new [description:"finish that paper crap" entry:"1463189242" status:"pending" uuid:"5ce7b869-cf9e-411c-8baf-f1c496bbe8da"]
+---
+time 1463189259
+new [description:"finish cse231 project" entry:"1463189259" status:"pending" uuid:"9cd47897-cca8-449c-8bbb-6e5a2bfd5f68"]
+---
+time 1463597543
+old [description:"finish cse231 project" entry:"1463189259" status:"pending" uuid:"9cd47897-cca8-449c-8bbb-6e5a2bfd5f68"]
+new [description:"finish cse231 project" end:"1463597543" entry:"1463189259" modified:"1463597543" status:"completed" uuid:"9cd47897-cca8-449c-8bbb-6e5a2bfd5f68"]
+---
+time 1463597556
+new [description:"buy car" entry:"1463597556" status:"pending" uuid:"568c49bb-6ea3-429c-bd0d-1aa723f449dd"]
+---
+time 1463597631
+new [description:"sean's ecj work" entry:"1463597631" status:"pending" uuid:"1527f485-86cc-4fa5-bf41-31ddcb3f93db"]
+---
+time 1463597694
+new [description:"raymond gp experiment" entry:"1463597694" status:"pending" uuid:"bc7f7cb5-4764-4688-887f-05ba5003db4e"]
+---
+time 1463597865
+old [description:"finish that paper crap" entry:"1463189242" status:"pending" uuid:"5ce7b869-cf9e-411c-8baf-f1c496bbe8da"]
+new [description:"finish that paper crap" entry:"1463189242" modified:"1463597865" priority:"H" status:"pending" uuid:"5ce7b869-cf9e-411c-8baf-f1c496bbe8da"]
+---
+time 1463597883
+new [description:"pay msu fees" entry:"1463597883" status:"pending" uuid:"07da1df4-1d23-4600-a03a-e0a4629960de"]
+---
+time 1463597898
+old [description:"pay msu fees" entry:"1463597883" status:"pending" uuid:"07da1df4-1d23-4600-a03a-e0a4629960de"]
+new [description:"pay msu fees" entry:"1463597883" modified:"1463597898" priority:"H" status:"pending" uuid:"07da1df4-1d23-4600-a03a-e0a4629960de"]
+---
+time 1463597940
+new [description:"prepare for 2017 intern" entry:"1463597940" status:"pending" uuid:"58e434c1-2c32-4aeb-a98b-cb03b94afefd"]
+---

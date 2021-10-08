@@ -1,0 +1,114 @@
+#!/bin/bash
+
+# ~/.sentient: executed by bash(1) for non-login shells.
+# This is sourced to refresh some of the application 
+# specific customized env variables. Although this is
+# automatically by the ~/.bashrc, however you can also
+# source it yourself, in that case you need to disable
+# the load command in the ~/.bashrc --
+#
+#	if [ -f ~/.sentient ]; then
+#		. ~/.sentient
+#	fi
+
+# Most of my craps are installed in /opt, but might change if host is different
+hostname=$HOSTNAME ;
+if [ "$hostname" = "cr55" ]; then
+    installdir="/opt" ;
+fi
+
+# If homebrew is installed, add /usr/local/sbin to PATH
+# If gnu coreutils is isntalled, add /usr/local/opt/coreutils/libexec/gnubin to PATH
+# if [ -x "$(command -v brew)" ]; then
+#     _augment PATH "/usr/local/sbin"
+#     gnubin="/usr/local/opt/coreutils/libexec/gnubin"
+#     if [ -d "$gnubin" ]; then
+#         _augment PATH "$gnubin"
+#     fi
+#     # in mac osx, all gnu bins are stored in /usr/local/opt so ...
+#     bcpath="/usr/local/opt/bc/bin"
+#     if [ -d "$bcpath" ]; then
+#         _augment PATH "$pbcpath"
+#     fi
+#     nmappath="/usr/local/opt/nmap/bin"
+#     if [ -d "$nmappath" ]; then
+#         _augment PATH "$nmappath"
+#     fi
+# fi
+
+#------------------------ if the machine is from sentient -------------------------------------
+# then override some of the previously set variables
+if [ "$hostname" = "ktalukder-mbp2" ]; then
+	# basic paths and manpaths
+	_augment PATH "$HOME/Applications"
+	_augment PATH "/usr/local/sbin"
+	_augment PATH "/usr/local/opt/coreutils/libexec/gnubin"
+	_augment PATH "/usr/local/opt/findutils/libexec/gnubin"
+	_augment PATH "/usr/local/opt/gnu-tar/libexec/gnubin"
+	_augment PATH "/usr/local/opt/gnu-sed/libexec/gnubin"
+	_augment PATH "/usr/local/opt/gettext/bin"
+	_augment PATH "/usr/local/opt/gnu-getopt/bin"
+	_augment PATH "/System/Library/Frameworks/JavaVM.framework/Versions/Current/Commands" 
+	_augment PATH "$HOME/Library/Python/3.6/bin"
+	_augment MANPATH "/usr/local/opt/coreutils/libexec/gnuman" 
+	_augment MANPATH "/usr/local/opt/findutils/libexec/gnuman" 
+	_augment MANPATH "/usr/local/opt/gnu-tar/libexec/gnuman" 
+	_augment MANPATH "/usr/local/opt/gnu-sed/libexec/gnuman" 
+	_augment MANPATH "/usr/local/opt/Cellar"
+	_augment GROOVY_HOME "/usr/local/opt/groovy/libexec"
+	
+	LIB_ROOT="$HOME/Library"
+	JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk1.8.0_121.jdk/Contents/Home/"
+	SSL_CERT_FILE=""
+	
+	ECJ_LIBS=$LIB_ROOT/ecj-libs;
+	if [ -d "$ECJ_LIBS" ]; then
+		for i in $ECJ_LIBS/*.jar; 
+		do
+			_augment CLASSPATH "$i";
+		done
+		ECJ_PATH=$HOME/work/ecj/ecj;
+		_augment CLASSPATH "$ECJ_PATH";
+	fi
+	
+	LEAF_JARPATH=$HOME/work/leaf/build/libs;
+	if [ -d "$LEAF_JARPATH" ]; then
+		for i in $LEAF_JARPATH/*.jar; 
+		do
+			_augment CLASSPATH "$i";
+		done
+	fi
+
+	export GROOVY_HOME
+fi
+
+#------------------------ git aware prompt ----------------------------------------------------
+gaprompt="$HOME/.bash/git-aware-prompt";
+if [ -e "$HOME/.bash/git-aware-prompt" ]; then
+	export GITAWAREPROMPT="$HOME/.bash/git-aware-prompt";
+	source "${GITAWAREPROMPT}/main.sh"
+    # if sentient machine
+	if [ "$hostname" = "ktalukder-mbp2" ]; then
+		# export PS1="${debian_chroot:+($debian_chroot)}\u@\h:\w\$ ";
+		export PS1="\u@\h:\w\[$txtcyn\][\$git_branch]\[$txtred\]\$git_dirty\[$txtrst\]\$ ";
+		# export PS1="\u@\h\W\[$txtcyn\]\$git_branch\[$txtred\]\$git_dirty\[$txtrst\]\$ ";
+		export SUDO_PS1="\[$bakred\]\u@\h\[$txtrst\] \w\$ ";
+	fi
+
+# -------------------- sentient.ai settings ---------------
+# all sentient.ai aliases, these will override some of the
+# preset aliases
+
+if [ "$hostname" = "ktalukder-mbp2" ]; then
+	alias trm='open -a Terminal "`pwd`"'
+	alias ls='ls -G'
+	alias opn='open'
+	alias rm='rmtrash'
+	alias rm!='/bin/rm -rf ~/.Trash/*'
+	alias updb='sudo /usr/libexec/locate.updatedb'
+	alias cr54='ssh -Y cr54'
+	alias cr55='ssh -Y cr55'
+	alias cr56='ssh -Y cr56'
+	alias cr57='ssh -Y cr57'
+fi
+

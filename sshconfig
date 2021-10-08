@@ -1,0 +1,394 @@
+# Note: 
+#   Before using it, make these modifications
+#       chmod 600 ~/.ssh/config
+#       chown $USER ~/.ssh/config
+
+# MSU HPCC
+Host hpcc
+    Hostname hpcc.msu.edu
+    User talukde1
+    IdentityFile ~/.ssh/id_rsa
+
+Host amd20
+    Hostname dev-amd20
+    User talukde1
+    IdentityFile ~/.ssh/id_rsa
+
+Host amd20v100
+    Hostname dev-amd20-v100
+    User talukde1
+    IdentityFile ~/.ssh/id_rsa
+
+Host intel14
+    Hostname dev-intel14
+    User talukde1
+    IdentityFile ~/.ssh/id_rsa
+
+Host intel16
+    Hostname dev-intel16
+    User talukde1
+    IdentityFile ~/.ssh/id_rsa
+
+Host intel18
+    Hostname dev-intel18
+    User talukde1
+    IdentityFile ~/.ssh/id_rsa
+
+Host intel14k20
+    Hostname dev-intel14-k20
+    User talukde1
+    IdentityFile ~/.ssh/id_rsa
+
+Host intel16k80
+    Hostname dev-intel16-k80
+    User talukde1
+    IdentityFile ~/.ssh/id_rsa
+
+# Host intel14phi
+#     Hostname dev-intel14-phi
+#     User talukde1
+#     IdentityFile ~/.ssh/id_rsa
+# 
+# Host hpccgw
+#     Hostname gateway.hpcc.msu.edu
+#     User talukde1
+#     IdentityFile ~/.ssh/id_rsa
+#
+# Host hpcceval
+#     Hostname eval.hpcc.msu.edu
+#     User talukde1
+#     IdentityFile ~/.ssh/id_rsa
+# 
+# Host hpccrdp
+#     Hostname rdp.hpcc.msu.edu
+#     User talukde1
+#     IdentityFile ~/.ssh/id_rsa
+
+# CSE machines
+Host black
+    Hostname black.cse.msu.edu
+    User talukde1
+    IdentityFile ~/.ssh/id_rsa
+
+Host arctic
+    Hostname black.cse.msu.edu
+    User talukde1
+    IdentityFile ~/.ssh/id_rsa
+
+# Host north
+#     Hostname north.cse.msu.edu
+#     User talukde1
+#     IdentityFile ~/.ssh/id_rsa
+#
+# Host adriatic
+#     Hostname adriatic.cse.msu.edu
+#     User talukde1
+#     IdentityFile ~/.ssh/id_rsa
+#
+# Host pacific
+#     Hostname pacific.cse.msu.edu
+#     User talukde1
+#     IdentityFile ~/.ssh/id_rsa
+#
+# Host atlantic
+#     Hostname atlantic.cse.msu.edu
+#     User talukde1
+#     IdentityFile ~/.ssh/id_rsa
+#
+# Host baltic
+#     Hostname baltic.cse.msu.edu
+#     User talukde1
+#     IdentityFile ~/.ssh/id_rsa
+#
+# Host bering
+#     Hostname bering.cse.msu.edu
+#     User talukde1
+#     IdentityFile ~/.ssh/id_rsa
+#
+# Host sargasso
+#     Hostname sargasso.cse.msu.edu
+#     User talukde1
+#     IdentityFile ~/.ssh/id_rsa
+#
+# Host reef
+#     Hostname reef.cse.msu.edu
+#     User talukde1
+#     IdentityFile ~/.ssh/id_rsa
+#
+# Host lists
+#     Hostname lists.cse.msu.edu
+#     User talukde1
+#     IdentityFile ~/.ssh/id_rsa
+#
+# Host mx
+#     Hostname mx.cse.msu.edu
+#     User talukde1
+#     IdentityFile ~/.ssh/id_rsa
+#
+# Host sulu
+#     Hostname sulu.cse.msu.edu
+#     User talukde1
+#     IdentityFile ~/.ssh/id_rsa
+#
+# Host coral
+#     Hostname coral.cse.msu.edu
+#     User talukde1
+#     IdentityFile ~/.ssh/id_rsa
+#
+# Host juice
+#     Hostname juice.cse.msu.edu
+#     User talukde1
+#     IdentityFile ~/.ssh/id_rsa
+
+# DECS machines
+Host compute01
+    Hostname compute01.egr.msu.edu
+    User talukde1
+    IdentityFile ~/.ssh/id_rsa
+
+Host compute02
+    Hostname compute02.egr.msu.edu
+    User talukde1
+    IdentityFile ~/.ssh/id_rsa
+
+Host compute03
+    Hostname compute03.egr.msu.edu
+    User talukde1
+    IdentityFile ~/.ssh/id_rsa
+
+Host compute04
+    Hostname compute04.egr.msu.edu
+    User talukde1
+    IdentityFile ~/.ssh/id_rsa
+
+Host compute05
+    Hostname compute05.egr.msu.edu
+    User talukde1
+    IdentityFile ~/.ssh/id_rsa
+
+Host compute06
+    Hostname compute06.egr.msu.edu
+    User talukde1
+    IdentityFile ~/.ssh/id_rsa
+
+Host compute07
+    Hostname compute07.egr.msu.edu
+    User talukde1
+    IdentityFile ~/.ssh/id_rsa
+
+Host compute08
+    Hostname compute08.egr.msu.edu
+    User talukde1
+    IdentityFile ~/.ssh/id_rsa
+
+Host compute09
+    Hostname compute09.egr.msu.edu
+    User talukde1
+    IdentityFile ~/.ssh/id_rsa
+
+Host compute10
+    Hostname compute10.egr.msu.edu
+    User talukde1
+    IdentityFile ~/.ssh/id_rsa
+
+# Sentient Machines
+Host cr54
+    Hostname cr54.geneticfinance.com
+    User gfuser
+    IdentityFile ~/.ssh/id_rsa
+
+Host cr55
+    Hostname cr55.geneticfinance.com
+    User gfuser
+    IdentityFile ~/.ssh/id_rsa
+
+Host cr56
+    Hostname cr56.geneticfinance.com
+    User gfuser
+    IdentityFile ~/.ssh/id_rsa
+
+Host cr57
+    Hostname cr57.geneticfinance.com
+    User gfuser
+    IdentityFile ~/.ssh/id_rsa
+
+# Nokia Bell Lab machines
+Host artemis
+    Hostname 10.4.83.141
+    User khaled
+    IdentityFile ~/.ssh/id_rsa
+
+Host atlas
+    Hostname 10.4.83.142
+    User khaled
+    IdentityFile ~/.ssh/id_rsa
+
+Host achilles
+    Hostname 10.4.83.143
+    User khaled
+    IdentityFile ~/.ssh/id_rsa
+
+Host oriole
+    Hostname 10.4.90.181
+    User khaled
+    IdentityFile ~/.ssh/id_rsa
+
+# For nod-labs source set up
+Host rnod
+    Hostname r.nod.com
+    User khaled
+    Port 29419
+    KexAlgorithms +diffie-hellman-group1-sha1
+
+# Google Compute Engine Section
+#
+# The following has been auto-generated by "gcloud compute config-ssh"
+# to make accessing your Google Compute Engine virtual machines easier.
+#
+# To remove this blob, run:
+#
+#   gcloud compute config-ssh --remove
+#
+# You can also manually remove this blob by deleting everything from
+# here until the comment that contains the string "End of Google Compute
+# Engine Section".
+#
+# You should not hand-edit this section, unless you are deleting it.
+#
+Host anita-4gpu-1.us-central1-a.nod-cloud
+    HostName 34.122.126.231
+    IdentityFile /home/khaled/.ssh/google_compute_engine
+    UserKnownHostsFile=/home/khaled/.ssh/google_compute_known_hosts
+    HostKeyAlias=compute.4455904975495984283
+    IdentitiesOnly=yes
+    CheckHostIP=no
+
+Host anush-ssh.us-central1-a.nod-cloud
+    HostName 34.72.151.119
+    IdentityFile /home/khaled/.ssh/google_compute_engine
+    UserKnownHostsFile=/home/khaled/.ssh/google_compute_known_hosts
+    HostKeyAlias=compute.2312797810006235156
+    IdentitiesOnly=yes
+    CheckHostIP=no
+
+Host dans-cpu-only-non-preemptible.us-central1-a.nod-cloud
+    HostName 104.198.192.89
+    IdentityFile /home/khaled/.ssh/google_compute_engine
+    UserKnownHostsFile=/home/khaled/.ssh/google_compute_known_hosts
+    HostKeyAlias=compute.3207922621457188012
+    IdentitiesOnly=yes
+    CheckHostIP=no
+
+Host jenkins-cpu-builder-1si4uv.us-central1-a.nod-cloud
+    HostName 23.251.149.150
+    IdentityFile /home/khaled/.ssh/google_compute_engine
+    UserKnownHostsFile=/home/khaled/.ssh/google_compute_known_hosts
+    HostKeyAlias=compute.5874784750324723883
+    IdentitiesOnly=yes
+    CheckHostIP=no
+
+Host jenkins-cpu-builder-51vne6.us-central1-a.nod-cloud
+    HostName 35.193.72.222
+    IdentityFile /home/khaled/.ssh/google_compute_engine
+    UserKnownHostsFile=/home/khaled/.ssh/google_compute_known_hosts
+    HostKeyAlias=compute.2306519014500507167
+    IdentitiesOnly=yes
+    CheckHostIP=no
+
+Host jenkins-cpu-builder-xxhv4k.us-central1-a.nod-cloud
+    HostName 35.224.168.108
+    IdentityFile /home/khaled/.ssh/google_compute_engine
+    UserKnownHostsFile=/home/khaled/.ssh/google_compute_known_hosts
+    HostKeyAlias=compute.8094826343167730053
+    IdentitiesOnly=yes
+    CheckHostIP=no
+
+Host khaled-n1s16-2ntv100.us-central1-a.nod-cloud
+    HostName 35.226.235.94
+    IdentityFile /home/khaled/.ssh/google_compute_engine
+    UserKnownHostsFile=/home/khaled/.ssh/google_compute_known_hosts
+    HostKeyAlias=compute.4553359322073154987
+    IdentitiesOnly=yes
+    CheckHostIP=no
+
+Host avinash-cpu3.us-central1-a.nod-cloud
+    HostName 34.72.237.14
+    IdentityFile /home/khaled/.ssh/google_compute_engine
+    UserKnownHostsFile=/home/khaled/.ssh/google_compute_known_hosts
+    HostKeyAlias=compute.6894571404166473225
+    IdentitiesOnly=yes
+    CheckHostIP=no
+
+Host ian-2gpu-1.us-central1-a.nod-cloud
+    HostName 35.225.201.79
+    IdentityFile /home/khaled/.ssh/google_compute_engine
+    UserKnownHostsFile=/home/khaled/.ssh/google_compute_known_hosts
+    HostKeyAlias=compute.8970208245483181169
+    IdentitiesOnly=yes
+    CheckHostIP=no
+
+Host ian-cpu.us-central1-a.nod-cloud
+    HostName 34.67.183.120
+    IdentityFile /home/khaled/.ssh/google_compute_engine
+    UserKnownHostsFile=/home/khaled/.ssh/google_compute_known_hosts
+    HostKeyAlias=compute.8040121907345702510
+    IdentitiesOnly=yes
+    CheckHostIP=no
+
+Host jenkins-1-vm.us-central1-a.nod-cloud
+    HostName 34.71.148.46
+    IdentityFile /home/khaled/.ssh/google_compute_engine
+    UserKnownHostsFile=/home/khaled/.ssh/google_compute_known_hosts
+    HostKeyAlias=compute.1696683388855401948
+    IdentitiesOnly=yes
+    CheckHostIP=no
+
+Host khaled-general.us-central1-a.nod-cloud
+    HostName 34.68.3.168
+    IdentityFile /home/khaled/.ssh/google_compute_engine
+    UserKnownHostsFile=/home/khaled/.ssh/google_compute_known_hosts
+    HostKeyAlias=compute.3376741688342597095
+    IdentitiesOnly=yes
+    CheckHostIP=no
+
+Host ramiros-compute-vm.us-central1-a.nod-cloud
+    HostName 34.134.17.56
+    IdentityFile /home/khaled/.ssh/google_compute_engine
+    UserKnownHostsFile=/home/khaled/.ssh/google_compute_known_hosts
+    HostKeyAlias=compute.4307461818638436748
+    IdentitiesOnly=yes
+    CheckHostIP=no
+
+Host sam-vm.us-central1-a.nod-cloud
+    HostName 34.123.91.201
+    IdentityFile /home/khaled/.ssh/google_compute_engine
+    UserKnownHostsFile=/home/khaled/.ssh/google_compute_known_hosts
+    HostKeyAlias=compute.8554503374180857041
+    IdentitiesOnly=yes
+    CheckHostIP=no
+
+Host stanley-nod-vm-machine-image.us-central1-a.nod-cloud
+    HostName 34.121.57.144
+    IdentityFile /home/khaled/.ssh/google_compute_engine
+    UserKnownHostsFile=/home/khaled/.ssh/google_compute_known_hosts
+    HostKeyAlias=compute.7012377618696382981
+    IdentitiesOnly=yes
+    CheckHostIP=no
+
+Host vivian-cpu-vm.us-central1-a.nod-cloud
+    HostName 34.123.153.172
+    IdentityFile /home/khaled/.ssh/google_compute_engine
+    UserKnownHostsFile=/home/khaled/.ssh/google_compute_known_hosts
+    HostKeyAlias=compute.1220997345039493938
+    IdentitiesOnly=yes
+    CheckHostIP=no
+
+Host nod-gerrit.us-west1-b.nod-cloud
+    HostName 104.199.122.191
+    IdentityFile /home/khaled/.ssh/google_compute_engine
+    UserKnownHostsFile=/home/khaled/.ssh/google_compute_known_hosts
+    HostKeyAlias=compute.4713256512539712391
+    IdentitiesOnly=yes
+    CheckHostIP=no
+
+# End of Google Compute Engine Section

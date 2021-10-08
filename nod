@@ -1,0 +1,269 @@
+#!/bin/bash
+
+# ~/.nod: executed by bash(1) for non-login shells.
+# This is sourced to refresh some of the application 
+# specific customized env variables. Although this is
+# automatically by the ~/.bashrc, however you can also
+# source it yourself, in that case you need to disable
+# the load command in the ~/.bashrc --
+#
+#	if [ -f ~/.nod ]; then
+#		. ~/.nod
+#	fi
+
+# Most of my craps are installed in /opt, but might change if host is different
+hostname=$HOSTNAME
+if [[ "$hostname" == "penguin" ]] || [[ "$hostname" == "khaled-general" ]]; then
+    [[ -d "$HOME/opt" ]] && installdir="$HOME/opt"
+fi
+
+# if a variable 'bigstr' is empty, then add the string 'substr' to it,
+# if it does not contain the string 'substr', then append 'substr' to it
+_augment()
+{
+	target=$1
+	bigstr=${!1}
+	substr=$2
+	
+	if [ -z "$bigstr" ]; then
+		# declare -g -- "$target=$substr"
+		eval "$target=\$substr"
+	elif [[ $bigstr != "$substr" 
+		&& $bigstr != *:"$substr" 
+		&& $bigstr != "$substr":* 
+		&& $bigstr != *:"$substr":* ]]; then
+		# declare -g -- "$target=$bigstr:$substr"
+		eval "$target=\$bigstr:\$substr"
+	fi
+}
+
+# remove duplicate substring from a bash env string
+_removedup()
+{
+	path=$1 ;
+    IFS=':' read -ra tokens <<< "$path" ;
+    uniq=($(tr ' ' '\n' <<< "${tokens[@]}" | sort -ru | tr '\n' ' '))
+    concat=`printf '%s:' "${uniq[@]}"` ;
+    echo "${concat%?}" ;
+}
+
+export WORKDIR="$HOME/nodlabs"
+export NODCLOUDDATA="/nodclouddata"
+export GS_FREEZER="gs://freezer"
+export GS_MOTIONDATA="gs://motiondata"
+export GS_NOD="gs://nod"
+export GS_NODDATA="gs://noddata"
+export GS_LUSTRE="gs://lustre"
+export GS_NODNY="gs://nodny"
+export GS_NODTERABYTE="gs://nodny"
+export GS_NODTPU="gs://tpu"
+
+# check if __git_ps1 works
+gitps1="no"
+if [ -n $(command -v __git_ps1) ]; then
+    gitps1="yes"
+fi
+	
+# A fancy color prompt
+if [ "$color_prompt" = "yes" ]; then
+    if [[ "$hostname" == "penguin" ]]; then
+        if [[ "$gitps1" == "no" ]]; then
+            export PS1='\[\033[0;32m\]\[\033[0;32m\]\u\[\033[0;35m\]@\[\033[0;36m\]\h:\[\033[0;34m\]\]\w\n\[\033[0;32m\]└─\033[0;32m\]>>\[\033[0m\] '
+        else
+            export PS1='\[\033[0;32m\]\[\033[0;32m\]\u\[\033[0;35m\]@\[\033[0;36m\]\h:\[\033[0;34m\]\]\w\n\[\033[0;32m\]└─\[\033[38;5;003m\]$(__git_ps1 | sed -e "s/^[[:space:]]*//")\[\033[0;32m\]>>\[\033[0m\] '
+        fi
+    elif [[ "$hostname" == "khaled-general" ]]; then
+        if [[ "$gitps1" == "no" ]]; then
+            export PS1='\[\033[0;32m\]\[\033[0;32m\]\u\[\033[0;35m\]@\[\033[0;36m\]\h:\[\033[0;34m\]\]\w\n\[\033[0;32m\]└─\[\033[0;32m\]«†»>\[\033[0m\] '
+        else
+            export PS1='\[\033[0;32m\]\[\033[0;32m\]\u\[\033[0;35m\]@\[\033[38;5;033m\]\h:\[\033[0;34m\]\]\w\n\[\033[0;32m\]└─\[\033[0;32m\]«†»\[\033[38;5;003m\]$(__git_ps1 | sed -r "s/^[[:space:]]*//")\[\033[0;32m\]>\[\033[0m\] '
+        fi
+    fi
+fi
+
+# set PATH so it includes user's private bin if it exists
+if [ -d "$HOME/bin" ] ; then
+    _augment PATH "$HOME/bin"
+fi
+
+# set PATH so it includes user's private bin if it exists
+if [ -d "$HOME/.local/bin" ] ; then
+	_augment PATH "$HOME/.local/bin"
+fi
+
+# add cuda, if there is any
+if [ -d "/usr/local/cuda-11.0" ]; then
+    _augment PATH "/usr/local/cuda-11.0/bin"
+    _augment LD_LIBRARY_PATH "/usr/local/cuda-11.0/lib64"
+    # export CUDA_HOME="/usr/local/cuda-11.0"
+    # export CUDA_PATH="/usr/local/cuda-11.0"
+    # export CUDNN_PATH="usr/local/cuda-11.0"
+    # export CUDNN_HOME="usr/local/cuda-11.0"
+    # export CUDNN_INCLUDE_DIR="/usr/local/cuda-11.0/include"
+    # export CUDNN_LIB_DIR="/usr/local/cuda-11.0/lib64"
+fi
+
+# ssh_auth_sock is not initialized for some reason
+# if [[ "$hostname" == "penguin" ]]; then
+#     eval "$(ssh-agent -s)"
+#     ssh-add ~/.ssh/id_rsa
+# fi
+
+#--------------------------------- git aware prompt --------------------------------------------
+gaprompt="$HOME/.bash/git-aware-prompt";
+if [ -e "$HOME/.bash/git-aware-prompt" ]; then
+	export GITAWAREPROMPT="$HOME/.bash/git-aware-prompt";
+	source "${GITAWAREPROMPT}/main.sh"
+fi
+
+# protoc paths
+if [ -d "$HOME/opt/protoc" ]; then
+    C_INCLUDE_PATH="$HOME/opt/protoc/include"
+    export C_INCLUDE_PATH
+    CPLUS_INCLUDE_PATH="$HOME/opt/protoc/include"
+    export CPLUS_INCLUDE_PATH
+    _augment PATH "$HOME/opt/protoc/bin"
+fi
+
+# append ~/nteract to PATH
+if [ -d "$HOME/opt/nteract-0.28.0" ] ; then
+    _augment PATH "$HOME/opt/nteract-0.28.0"
+fi
+
+# append my bin files
+if [ -d "$HOME/.sys-utils/bin" ]; then
+    _augment PATH "$HOME/.sys-utils/bin"
+fi
+
+# julia
+if [ -d "$HOME/opt/julia-1.5.4" ]; then
+    _augment PATH "$HOME/opt/julia-1.5.4/bin"
+fi
+
+# rust cargo
+if [ -f "$HOME/.cargo/env" ]; then
+    . "$HOME/.cargo/env"
+fi
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f "$HOME/opt/google-cloud-sdk/path.bash.inc" ]; then 
+    . "$HOME/opt/google-cloud-sdk/path.bash.inc"; 
+fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f "$HOME/opt/google-cloud-sdk/completion.bash.inc" ]; then 
+    . "$HOME/opt/google-cloud-sdk/completion.bash.inc"; 
+fi
+
+# llvm-11
+if [ -d "/usr/lib/llvm-11/bin" ]; then
+    _augment PATH /usr/lib/llvm-11/bin
+fi
+
+# Blis
+if [ -d "$HOME/opt/blis" ]; then
+    _augment LD_LIBRARY_PATH $HOME/opt/blis/lib
+fi
+
+# Halide
+if [ -d "$HOME/opt/halide" ]; then
+    HALIDE_DIR="$HOME/opt/halide"
+    export HALIDE_DIR
+fi
+
+# intel oneAPI
+if [ -d "/opt/intel/oneapi" ]; then
+. /opt/intel/oneapi/setvars.sh
+fi
+
+# LLVM/MLIR
+if [ -d "$HOME/opt/llvm/bin" ]; then
+    _augment PATH "$HOME/opt/llvm/bin"
+fi
+
+if [ -d "$HOME/opt/llvm/lib" ]; then
+    _augment LD_LIBRARY_PATH "$HOME/opt/llvm/lib"
+fi
+
+###---------------------- Now clean up and export ----------------------------###
+# remove duplicate entries, if any --
+PATH=`_removedup "$PATH"` ;
+LD_LIBRARY_PATH=`_removedup "$LD_LIBRARY_PATH"` ;
+# Now, export them all --
+[[ ! -z $PATH ]] && export PATH;
+[[ ! -z $LD_LIBRARY_PATH ]] && export LD_LIBRARY_PATH;
+
+
+###----------------------- Some NOD specific aliases --------------------------###
+
+# alacritty
+alias ala='alacritty >>/tmp/alacritty-dump.log 2>&1 &'
+
+# firefox
+_firefox()
+{
+    if [ -d "$HOME/opt/firefox" ]; then
+        $HOME/opt/firefox/firefox >>/tmp/firefox-dump.log 2>&1 &
+    else
+        echo "Error: firefox is not installed in $HOME/opt."
+    fi    
+}
+alias firefox='_firefox'
+
+# blender
+_blender279()
+{
+    if [ -d "$HOME/opt/blender-2.79a-linux-glibc219-x86_64" ]; then
+        pwd_=$(pwd)
+        cd $HOME/opt/blender-2.79a-linux-glibc219-x86_64 ;
+        LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$HOME/opt/blender-2.79a-linux-glibc219-x86_64/lib" ./blender >>/tmp/blender.log 2>&1 & 
+        cd $pwd_
+    fi
+}
+alias blender279='_blender279'
+
+_blender291()
+{
+    if [ -d "$HOME/opt/blender-2.91.0-linux64" ]; then
+        pwd_=$(pwd)
+        cd $HOME/opt/blender-2.91.0-linux64 ;
+        LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$HOME/opt/blender-2.91.0-linux64/lib" ./blender-softwaregl >>/tmp/blender.log 2>&1 & 
+        cd $pwd_
+    fi
+}
+alias blender291='_blender291'
+
+# git commands
+alias gpull='git pull origin'
+alias gls='git ls-files'
+alias gadd='git add'
+alias gci='git commit'
+alias gpush='git push origin'
+alias gco='git checkout'
+alias grm='git rm --cached'
+alias gmv='git mv'
+alias gdiff='git diff'
+alias gdiffn='git diff --name-only'
+alias gtrack='git branch --track'
+alias gstat='git status'
+alias glg='git lg'
+alias glg1='git lg1'
+alias glg2='git lg2'
+alias glg3='git lg3'
+alias glg4='git lg4'
+alias glg5='git lg5'
+alias glg6='git lg6'
+alias glog='git log'
+
+# ------------------------ nod-labs GCP access -------------------------
+alias gcssh='gcloud compute ssh'
+alias gcscp='gcloud compute scp'
+alias gctpus='gcloud compute tpus'
+alias gcstart='gcloud compute instances start'
+alias gcstop='gcloud compute instances stop'
+#
+alias gsuls='gsutil ls'
+alias gsucp='gsutil cp'
+alias gsurm='gsutil rm'
+alias gsumcp='gsutil -m cp'
+alias gsumrm='gsutil -m rm'

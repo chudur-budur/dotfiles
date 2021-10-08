@@ -1,0 +1,10 @@
+[global]
+# device=cuda1 # use different cuda device for different runs
+floatX=float32
+
+[gcc]
+cxxflags=-march=ivybridge
+
+[dnn]
+include_path=/opt/software/cuDNN/6.0--CUDA-8.0/include 
+library_path=/opt/software/cuDNN/6.0--CUDA-8.0/lib64 

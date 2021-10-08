@@ -1,0 +1,202 @@
+#!/bin/bash
+# ~/.myinfo: executed by ~/.bashrc.
+# This is a custom aliases set by '$USER'
+# Put this file in '$HOME' (~/) folder
+
+_dumppgpkeyblock()
+{
+cat << EOF	
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+mQINBFr8uJsBEADZC6A9m7sE6GIolLI0gdQU3/ldL4Ak8YuoufOmmQS3WF8A3RI9
+fj3j5LMPt100tGZMjr2cIkpa6Z7r5PfwpAeKRNJD9looXcZOM0NK4z7QB2/vTY9r
+I2HZteN8ndJHx6e6GLzB5jfaTgw/5+SpKz8vbQ3wArw6UTPL/uieK5X1MQt/wFRd
+baOR3AvFRq+I8zy+BAGdVBAWWCSw5aBiF1IUQnFxvJ0Sgw7tK3Fo9hFZeYxspels
+8Hzdu8a8PKdjZT/mhU8cSF11Bt4hqfnHnKUWeYx/hoXkXrAoJJo5B4qXzWTHMT/9
+ArNJ1cx7YiaLaRVs/tXT69DvCiYzs9WRWHhuOq8Q9C9AjnbZWex7L2mV3UCpTDuW
+uZV3nBsgzphKV6lqi5WPetIs72lTTHYX8zIY317dZoY1G5gFHUYyh6tQyoTU9j29
+fYvQ2nfYz4i3gyHMYy70xMqwCAUXA3g7D4UHImn/NO6PdVCd+Csu4YFOqj7lR9Ym
+gVp8uOcYV6c/6GsmasXHJ6+Xo99STZpNlObK+udPBxZARS7prrgUBxjugTnFe8Fi
+SiPLezOjV6RFD/crhE6AzGiQ8IMNxmqtXlrDA1WssCrojS8TtSJgU1Rq4+tllQZ/
+BefWU3tSVYxJEtLeOFjI1xVhEuTvWE7/9Iwaql7VN2liqgKRAzCU1c4q6wARAQAB
+tHxBS00gS2hhbGVkIEFoc2FuIFRhbHVrZGVyIChUaGlzIGlzIGEgbmV3IGdwZyBr
+ZXkgY3JlYXRlZCBvbiBNYXkgMTYsIDIwMTgsIG9uIFVidW50dSAxOC4wNCkgPGto
+YWxlZC5haHNhbi50YWx1a2RlckBnbWFpbC5jb20+iQJOBBMBCgA4FiEEOeoqEFVZ
+ZdT+TnRHn+InihjOZtAFAlr8uJsCGwMFCwkIBwIGFQoJCAsCBBYCAwECHgECF4AA
+CgkQn+InihjOZtA/JQ//RIlmKT1hkdR8UuNdm1FMJmwjipjd2r0Q3/vBr2mkf01s
+aGZBWaPDl4C7ahnUIkNq2R7+D7f/ZULYVuYyTmm9tXqx2D/NxWTgNVIVxqh4ULWZ
+IQsAy5oYxs+6UaCqsu/jyiSrMW4hR7Avaxl6DeRM3+Z2u0lRBAHIK8/Z4KbF1jZ0
+tK0dq31yjxfkL2XH2EN9bc57ZGYelHa181JK1HtYCqdEBkGhotb1gUImyFX+c4eT
+DC9o4JtQtKg2Paiewr5J/SrLyZOHcSoihA4Yz4+leg2n1TM1/rMECG4p1B97b3lc
+xNR6kQmeS4egSFu1uji3C1YuoympvlfCABha+N3Nv3m3Li7losWfj97JS0eTxBU+
+TcQQ3GtqakWZ2S9KcEvcPzlcKwe+ixqu0gJRUqcdIHkOlKTzt7Er0L7Caf98tv+S
+D4r2zol9tRVBbLSasxzlQ9FBKyYsuTdgb8bJlJHKIpNMZ0XOHQ/LKUnlprI01CIW
+UJRqzruygY7gGsUkxrAiJG0kij9ZDGfmH9TRDEL4cGWfe7IM5ew6Jzvcs6Qcivt1
+co0RsmEyr03e6Cr1a4pEo9+9jNstsYT/yoZ88aSc8e9Z90WFImdUyjUPqJmK7VwU
+/N005j400ylUCTbQYiXRWr6eoFiD+zsKyLC/4twH11pI2fGkyk0Ru99cVSeiHEa5
+Ag0EWvy4mwEQAL8KGpc4t2fUGXO7qTWE/BcrvBSX/QZKSJtFwrAfJjqszgqeB9+d
+hBl2HUX0UUnRuE1q8pK3j0GBwVu40wzn8IHzrI7fW8Pc7mmSVKI+s2nOLgUm2lQT
+Vq0nL+Hop4BBVH9K7LWbrP4qjjroBxFeZw47KnIW0uXeypEh8fYUBvNcDjqeuHDG
+rBKRP66wlsrjQeCeCgOa/o3l+PUqllKDaAIunSoVxnykxlgy7nafcBi2E38k1XC6
+8eej5MY586Zb5o3YYh6s/1akI1NTw9X0Tzh1+ujmNlIHLZm3x/KLyMY2gyD9Mn4s
+I6GTB/PKe9K3fwdj06ieK78ix1Db6nyS/BXjVADwtW2WXj6aLHK+4NfdUr8FBlWz
+gPKID74Ew7WE2PdLzHQt/WyRbni0VWVUfvTW77X3ZNjHIioWDlfOd5ih9J8aeLPc
+Wy/Awamlz5ouTkphI1DoFunle3sYE26Ce4U0zzFAkjL7s66KOEeeVn4R82GsOw8Z
+ShYN/tZPhLAzJTSk4Gh09xVS+Zolq9+qhr01fe8/4yGUVMS59anC9sv5A1iNQHM6
+cwJA0sa4bVsPjOaNvX1KCIvY4BncS241NI0oy3qt1kz8uN584R29sa0oXfpR67sP
+oaZ/c/rivILBxnkhwFN+hEM1q31hLMXFpkHyGX/ucWzvLr0eeK5JT1HLABEBAAGJ
+AjYEGAEKACAWIQQ56ioQVVll1P5OdEef4ieKGM5m0AUCWvy4mwIbDAAKCRCf4ieK
+GM5m0LtwD/4qEGbSTUc0asoVPKJeqCxhmusgRZDxcQRo9ywQO6u8+BqZQxr8lDk/
+AOVnAb+DjtS/r+engBa2zHSJuyGkKnhAOtThxah/putNV+fbaQz97+eOzRGn22lE
+dzSndML8DTMpGd5e8e+x4lNGbyVm0NJACagsoz7uss3iUrt1Us+TDdio8ZOi0zTk
+YdYHwF/M4P7KrTwDs3hwJkT5CkYOHm1kWz6netokuRlGGKrCWhiw/dqgTmwcEEi4
+6G45zOTIPj9ExaZvj/rMSPPCHhoGJ2ex2VgUtnvw/X5rIvGQkF4jdGxLVrXNGjlA
+lQR4ezwT6QUKMo7pIPSI1JbZzNtEzKbP93RmEiwc55CaQzg4TRF9t7f1YDQXJFK2
+NyixEMLlamaezV2VLOot1/Q8NOgdjKuqXm4oWVoru2KeEJXw9TV6TE03NIP48DAB
+ZTkuz5wGZgiIo95esc92X9oRnQwT9A/O6bYfXTnJhKcgea9KRGaoHhoTxw+iYkoM
++pY95QaH/y7rcivd2jeFaM3xID0cuQN91GXIBoEucSyne2j7nxK3iwJC5hwsLmr3
+lmWHdNBBj8SOnrvpRTWaQ6rsTYQ7CBQ2mumQqukEEs7lYuWT8PKr00pONu/PirLx
+Aa+Te9xk4g2yronL6ei9VoZnR4ribhY79iK1BtuTRY4n+sNnHj1ujA==
+=B/KW
+-----END PGP PUBLIC KEY BLOCK-----
+EOF
+}
+alias pgpkey='_dumppgpkeyblock'
+
+# ---------------- personal info in gnome-keyring ---------------------------
+# this is how you set: echo "72361#$%$#" | gnome-keyring-query set yahoopass
+_getphonenumbers()
+{
+    if [[ "$osname" == "macOS" ]]; then
+        echo "Not implemented yet." ;
+    else
+        [ -f /usr/local/bin/gnome-keyring-query ] && \
+            homephonelansing=$(gnome-keyring-query get homephone-lansing) && \
+            tmobile=$(gnome-keyring-query get mobile-tmobile) && \
+            pageplus=$(gnome-keyring-query get mobile-pageplus) && \
+            bouh2o=$(gnome-keyring-query get mobile-bouh2o);
+        printf "home [lansing]: %s\n" $homephonelansing ;
+        printf "t-mobile: %s\n" $tmobile ;
+        printf "pageplus: %s\n" $pageplus ;
+        printf "bou [h2o]: %s\n" $bouh2o ;
+        printf "ringtel [mi]: 313-523-4547, 313-523-4549\n" ;
+    fi
+}
+_getssn()
+{
+    if [[ "$osname" == "macOS" ]]; then
+        echo "Not implemented yet." ;
+    else
+        [ -f /usr/local/bin/gnome-keyring-query ] && \
+            ssnkat=$(gnome-keyring-query get ssnkat) && \
+            ssnimara=$(gnome-keyring-query get ssnimara) && \
+            itintn=$(gnome-keyring-query get itintn) && \
+            itininaaya=$(gnome-keyring-query get itininaaya);
+        printf "sss     [kt]: %s\n" $ssnkat ;
+        printf "ssn     [im]: %s\n" $ssnimara ;
+        printf "ssn     [tn]: %s\n" $itintn ;
+        printf "itin    [in]: %s\n" $itininaaya ;
+    fi
+}
+_getbankinfo()
+{
+    if [[ "$osname" == "macOS" ]]; then
+        echo "Not implemented yet." ;
+    else
+        [ -f /usr/local/bin/gnome-keyring-query ] && \
+            boa_accno=$(gnome-keyring-query get boa-accno) && \
+            boa_rn=$(gnome-keyring-query get boa-rn) && \
+            boa_dc_kat=$(gnome-keyring-query get boa-dc-kat) && \
+            boa_dc_tn=$(gnome-keyring-query get boa-dc-tn) && \
+            msufcu_accno=$(gnome-keyring-query get msufcu-accno) && \
+            msufcu_rn=$(gnome-keyring-query get msufcu-rn) && \
+            msufcu_pc_kat=$(gnome-keyring-query get msufcu-pc-kat) && \
+            msufcu_dc_kat=$(gnome-keyring-query get msufcu-dc-kat) && \
+            msufcu_cc_kat=$(gnome-keyring-query get msufcu-cc-kat) && \
+            msufcu_dc_tn=$(gnome-keyring-query get msufcu-dc-tn) && \
+            msufcu_cc_tn=$(gnome-keyring-query get msufcu-cc-tn);
+        printf "boa                                        [acc] [rn]: [%s] [%s]\n" $boa_accno $boa_rn ;
+        printf "boa dc    [AKM KHALED A TALUKDER] [(no)-(exp)-(code)]: %s\n" $boa_dc_kat ;
+        printf "boa dc             [TAIBUN NESSA] [(no)-(exp)-(code)]: %s\n" $boa_dc_tn ;
+        printf "msufcu                                     [acc] [rn]: [%s] [%s]\n" $msufcu_accno $msufcu_rn ;
+        printf "msufcu pc          [AKM TALUKDER] [(no)-(exp)-(code)]: %s\n" $msufcu_pc_kat ;
+        printf "msufcu dc [AKM KHALED A TALUKDER] [(no)-(exp)-(code)]: %s\n" $msufcu_dc_kat ;
+        printf "msufcu cc [AKM KHALED A TALUKDER] [(no)-(exp)-(code)]: %s\n" $msufcu_cc_kat ;
+        printf "msufcu dc          [TAIBUN NESSA] [(no)-(exp)-(code)]: %s\n" $msufcu_dc_tn ;
+        printf "msufcu cc          [TAIBUN NESSA] [(no)-(exp)-(code)]: %s\n" $msufcu_cc_tn ;
+    fi
+}
+## 
+#	Need to store:
+#		sourceforge [closed]
+#		gitlab [closed]
+#		odesk [upwork.com, closed]
+#		freelancer [closed]
+#		elance [odesk.com]
+#		vworker [closed]
+#		getacoder [closed]
+#		scriptlance [closed]
+_getallpass()
+{
+
+    if [[ "$osname" == "macOS" ]]; then
+        echo "Not implemented yet." ;
+    else
+        [ -f /usr/local/bin/gnome-keyring-query ] && \
+            launchpad=$(gnome-keyring-query get launchpadpw) && \
+            github=$(gnome-keyring-query get githubpw) && \
+            bitbucket=$(gnome-keyring-query get bitbucketpw) && \
+            linkedin=$(gnome-keyring-query get linkedinpw) && \
+            hotmail=$(gnome-keyring-query get hotmailpw) && \
+            code_icted=$(gnome-keyring-query get code_ictedpw) && \
+            polin_ruet=$(gnome-keyring-query get polin_ruetpw) && \
+            akmkat_bd=$(gnome-keyring-query get akmkat_bdpw) && \
+            bitr99306=$(gnome-keyring-query get bitr99306pw) && \
+            rina_intrdr=$(gnome-keyring-query get rina_intrdrpw) && \
+            danagroupbd=$(gnome-keyring-query get danagroupbdpw) ;
+        printf "launchpad [k****d.a***n.t******r@g****.com]: %s\n" $launchpad ;
+        printf "github    [k****d.a***n.t******r@g****.com]: %s\n" $github ;
+        printf "bitbucket [k****d.a***n.t******r@g****.com]: %s\n" $bitbucket ;
+        printf "linkedin  [k****d.a***n.t******r@g****.com]: %s\n" $linkedin ;
+        printf "hotmail            [p****_***t@hotmail.com]: %s\n" $hotmail ;
+        printf "code_icted                                 : %s\n" $code_icted ;
+        printf "polin_ruet                                 : %s\n" $polin_ruet ;
+        printf "akmkat_bd                                  : %s\n" $akmkat_bd ;
+        printf "bitr99306                                  : %s\n" $bitr99306 ;
+        printf "rina_intrdr                                : %s\n" $rina_intrdr ;
+        printf "danagroupbd                                : %s\n" $danagroupbd ;
+    fi
+}
+alias phones='_getphonenumbers'
+alias ssn='_getssn'
+alias address='echo "320 N Chestnut St., Apt 302, Lansing, MI 48933, USA"'
+alias getallpass='_getallpass'
+alias bank='_getbankinfo'
+
+# --------------------------- MSU Info -----------------------------
+_getgmuinfo()
+{
+	[ -f /usr/local/bin/gnome-keyring-query ] && \
+		gmunetidpw=$(gnome-keyring-query get gmunetid-atalukde) && \
+		patriotpass=$(gnome-keyring-query get patriotpass);
+	printf "gmu pid: G00711114\n" ;
+	printf "gmu netid [pw]: atalukde [%s]\n" $gmunetidpw ;
+	printf "patriotpass: %s\n" $patriotpass ;
+}
+alias gmuid='_getgmuinfo'
+
+# --------------------------- GMU Info -----------------------------
+_getmsuinfo() 
+{
+	[ -f /usr/local/bin/gnome-keyring-query ] && \
+		msupw=$(gnome-keyring-query get msunetid-talukde1) ;
+	printf "msu pid: A45643395\n" ;
+	printf "msu netid [pw]: talukde1 [%s]\n" $msupw ;
+}
+alias msuid='_getmsuinfo' ;
+
+# Now, export them all, if there are --
+export MYKEYID;
+
+
+

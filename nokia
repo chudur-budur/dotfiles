@@ -1,0 +1,176 @@
+#!/bin/bash
+
+# ~/.nokia: executed by bash(1) for non-login shells.
+# This is sourced to refresh some of the application 
+# specific customized env variables. Although this is
+# automatically by the ~/.bashrc, however you can also
+# source it yourself, in that case you need to disable
+# the load command in the ~/.bashrc --
+#
+#	if [ -f ~/.nokia ]; then
+#		. ~/.nokia
+#	fi
+
+# Some extra env variables for msu hpc stuffs.
+
+# Most of my craps are installed in /opt, but might change if host is different
+hostname=$HOSTNAME ;
+if [ "$hostname" = "nokia-bl" ] || [ "$hostname" = "N-20KEPC10M813" ]; then
+    installdir="/opt" ;
+elif [ "$hostname" = "atlas-slave-node" ]; then
+    installdir="/opt" ;
+fi
+
+# path to user's executables
+[ -d "$HOME/.sys-utils/bin" ] && _augment PATH "$HOME/.sys-utils/bin"
+[ -d "$HOME/bin" ] && _augment PATH "$HOME/bin" ;
+[ -d "$HOME/.local/bin" ] && _augment PATH "$HOME/.local/bin" ;
+[ -d "$HOME/opt/anaconda3/bin" ] && _augment PATH "$HOME/opt/anaconda3/bin" ;
+[ -d "$HOME/opt/anaconda3/condabin" ] && _augment PATH "$HOME/opt/anaconda3/condbin" ;
+
+# --------------------------- cuda stuffs --------------------------------------
+lib64path=/usr/lib/nvidia-430
+if [ -d "$lib64path" ]; then
+	_augment LD_LIBRARY_PATH "$lib64path" ;
+	_augment LIBRARY_PATH "$lib64path" ;
+fi
+
+libnvidiapath=/usr/lib32/nvidia-430
+if [ -d "$libnvidiapath" ]; then
+	_augment LD_LIBRARY_PATH "$libnvidiapath" ;
+	_augment LIBRARY_PATH "$libnvidiapath" ;
+fi
+CUDA_VISIBLE_DEVICES=0
+
+#------------------------ git aware prompt ----------------------------------------------------
+gaprompt="$HOME/.bash/git-aware-prompt";
+if [ -e "$HOME/.bash/git-aware-prompt" ]; then
+	export GITAWAREPROMPT="$HOME/.bash/git-aware-prompt";
+	source "${GITAWAREPROMPT}/main.sh"
+    # if bell lab machine
+	if [ "$hostname" = "nokia-bl" ] || [ "$hostname" = "N-20KEPC10M813" ]; then
+		if [ "$color_prompt" = "yes" ]; then
+			export PS1="\${debian_chroot:+(\$debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\[$txtcyn\][\$git_branch]\[$txtred\]\$git_dirty\[$txtrst\]\$ ";
+		    # export PS1='\[\033[0;32m\]\[\033[0m\033[0;32m\]\u\[\033[0;36m\] @ \[\033[0;36m\]\h \w\[\033[0;32m\]$(__git_ps1)\n\[\033[0;32m\]└─\[\033[0m\033[0;32m\] \$\[\033[0m\033[0;32m\] ▶\[\033[0m\] '
+		else
+			export PS1="\${debian_chroot:+(\$debian_chroot)}\u@\h:\w\[$txtcyn\][\$git_branch]\[$txtred\]\$git_dirty\[$txtrst\]\$ ";
+		fi
+	fi
+fi
+
+
+# ---------------------------- ros stuffs ------------------------------
+# ros settings
+if [ -f "/opt/ros/kinetic/setup.bash" ]; then
+    source /opt/ros/kinetic/setup.bash
+    export ROS_HOSTNAME=localhost
+    export ROS_MASTER_URI=http://localhost:11311
+fi
+
+# ------------------------------- conda settings -----------------------------------------
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/home/khaled/opt/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/home/khaled/opt/anaconda3/etc/profile.d/conda.sh" ]; then
+        source "/home/khaled/opt/anaconda3/etc/profile.d/conda.sh"
+    fi
+fi
+unset __conda_setup
+
+#------------------------ python virtual env -----------------------------------
+
+probe=$(which conda);
+if [ ! -z "$probe" ]; then 
+    alias envwm='conda activate wm'
+    alias envd='conda deactivate'
+elif [ -d "$HOME/.wm" ]; then
+    alias envwm='source ~/.wm/bin/activate'
+    alias envd='deactivate'
+fi
+
+# for qt-opt experiments
+if [ -d "$HOME/.qtopt" ]; then
+    probe=$(which conda);
+    if [ ! -z "$probe" ]; then 
+        alias envqtopt='conda activate ~/.qtopt'
+        alias envd='conda deactivate'
+    else
+        alias envqtopt='source ~/.qtopt/bin/activate'
+        alias envd='deactivate'
+    fi
+fi
+
+#------------------------ git aware prompt -------------------------------------
+gaprompt="$HOME/.bash/git-aware-prompt";
+if [ -e "$HOME/.bash/git-aware-prompt" ]; then
+	export GITAWAREPROMPT="$HOME/.bash/git-aware-prompt";
+	source "${GITAWAREPROMPT}/main.sh"
+	if [[ "$hostname" == *"-slave-node"* ]]; then
+		if [ "$color_prompt" = "yes" ]; then
+			export PS1="\${debian_chroot:+(\$debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\[$txtcyn\][\$git_branch]\[$txtred\]\$git_dirty\[$txtrst\]\$ ";
+		    # export PS1='\[\033[0;32m\]\[\033[0m\033[0;32m\]\u\[\033[0;36m\] @ \[\033[0;36m\]\h \w\[\033[0;32m\]$(__git_ps1)\n\[\033[0;32m\]└─\[\033[0m\033[0;32m\] \$\[\033[0m\033[0;32m\] ▶\[\033[0m\] '
+		else
+			export PS1="\${debian_chroot:+(\$debian_chroot)}\u@\h:\w\[$txtcyn\][\$git_branch]\[$txtred\]\$git_dirty\[$txtrst\]\$ ";
+		fi
+	fi
+fi
+
+#---------------------- if the machine is from nokia bell lab --------------------------------
+if [ "$hostname" = "N-20KEPC10M813" ]; then
+    winbinpath=/mnt/c/Windows;
+    winsys32path="$winbinpath"/System32;
+    powershellpath="$winsys32path"/WindowsPowerShell/v1.0;
+    _augment PATH "$winbinpath";
+    _augment PATH "$winsys32path";
+    _augment PATH "$powershellpath";
+	export DISPLAY=127.0.0.1:0.0 ;
+	export NO_AT_BRIDGE=1 ;
+fi
+
+# remove duplicate entry, if any.
+PATH=`_removedup "$PATH"` ;
+LD_LIBRARY_PATH=`_removedup "$LD_LIBRARY_PATH"` ;
+LIBRARY_PATH=`_removedup "$LIBRARY_PATH"` ;
+CPATH=`_removedup "$CPATH"` ;
+
+# now export them
+export PATH;
+export LD_LIBRARY_PATH;
+export LIBRARY_PATH;
+export CPATH;
+export CUDA_VISIBLE_DEVICES
+
+# purge command
+_purge()
+{
+    if [[ "$hostname" == "nokia-bl" ]]; then
+        gio trash --empty
+    fi
+}
+alias rm!='_purge'
+
+_openwindoze()
+{
+    if [ -x "$(command -v powershell.exe)" ] && [ -x "$(command -v wslpath.exe)" ] ; then
+        path="\$\(wslpath \$\@\)" ;
+        echo "powershell.exe Start-Process $path" ;
+    else
+		echo "Error: wopen command only works on windoze machine, thanks." ;
+    fi
+}
+alias wopen='_openwindoze'
+
+# ----------------- nokia bell lab settings ---------------
+if [ "$hostname" = "nokia-bl" ] || [ "$hostname" = "N-20KEPC10M813" ] || [[ "$hostname" == *"-slave-node"* ]]; then
+    alias artemis='ssh artemis'
+    alias artemisx='ssh -Y artemis'
+    alias atlas='ssh atlas'
+    alias atlasx='ssh -Y atlas'
+    alias achilles='ssh achilles'
+    alias achillesx='ssh -Y achilles'
+    alias oriole='ssh oriole'
+    alias oriolex='ssh -Y oriole'
+fi
+
