@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ~/.myenv: executed by bash(1) for non-login shells.
-# This is sourced to refresh some of the application 
+# This is sourced to refresh some of the application
 # specific customized env variables. Although this is
 # automatically by the ~/.bashrc, however you can also
 # source it yourself, in that case you need to disable
@@ -18,13 +18,13 @@ _augment()
 	target=$1
 	bigstr=${!1}
 	substr=$2
-	
+
 	if [ -z "$bigstr" ]; then
 		# declare -g -- "$target=$substr"
 		eval "$target=\$substr"
-	elif [[ $bigstr != "$substr" 
-		&& $bigstr != *:"$substr" 
-		&& $bigstr != "$substr":* 
+	elif [[ $bigstr != "$substr"
+		&& $bigstr != *:"$substr"
+		&& $bigstr != "$substr":*
 		&& $bigstr != *:"$substr":* ]]; then
 		# declare -g -- "$target=$bigstr:$substr"
 		eval "$target=\$bigstr:\$substr"
@@ -54,19 +54,19 @@ function colorgrid( )
         seven=$[$six+36]
         if [ $seven -gt 250 ];then seven=$[$seven-251]; fi
 
-        echo -en "\033[38;5;$(echo $iter)m█ "
+        echo -en "\033[38;5;$(echo $iter)m  "
         printf "%03d" $iter
-        echo -en "   \033[38;5;$(echo $second)m█ "
+        echo -en "   \033[38;5;$(echo $second)m  "
         printf "%03d" $second
-        echo -en "   \033[38;5;$(echo $third)m█ "
+        echo -en "   \033[38;5;$(echo $third)m  "
         printf "%03d" $third
-        echo -en "   \033[38;5;$(echo $four)m█ "
+        echo -en "   \033[38;5;$(echo $four)m  "
         printf "%03d" $four
-        echo -en "   \033[38;5;$(echo $five)m█ "
+        echo -en "   \033[38;5;$(echo $five)m  "
         printf "%03d" $five
-        echo -en "   \033[38;5;$(echo $six)m█ "
+        echo -en "   \033[38;5;$(echo $six)m  "
         printf "%03d" $six
-        echo -en "   \033[38;5;$(echo $seven)m█ "
+        echo -en "   \033[38;5;$(echo $seven)m  "
         printf "%03d" $seven
 
         iter=$[$iter+1]
@@ -105,7 +105,7 @@ if [ -d "/opt/bin" ]; then
 fi
 
 # fixing vim backspace
-stty erase '^?' 2>/dev/null ; 
+stty erase '^?' 2>/dev/null ;
 
 # some x stuffs
 xrdb -v >/dev/null 2>&1
@@ -123,7 +123,7 @@ gitps1="no"
 if [ -n $(command -v __git_ps1) ]; then
     gitps1="yes"
 fi
-	
+
 # A fancy prompt
 if [ "$color_prompt" = "yes" ]; then
     # if my local machine
@@ -152,12 +152,12 @@ if [ "$?" = "1" ]; then
 	git config --global core.excludesfile ~/.gitignore_global 
 fi
 
-# git auto completion 
+# git auto completion
 if [ -f "~/.git-completion.bash" ]; then
     source ~/.git-completion.bash;
 fi
 
-# git aware prompt 
+# git aware prompt
 gaprompt="$HOME/.bash/git-aware-prompt";
 if [ -e "$HOME/.bash/git-aware-prompt" ]; then
 	export GITAWAREPROMPT="$HOME/.bash/git-aware-prompt";
@@ -179,7 +179,7 @@ if [ -d "$gtk2stuffs" ]; then
 		fi
 	done
 fi
-gtk3stuffs=/usr/lib/x86_64-linux-gnu/gtk-3.0/modules; 
+gtk3stuffs=/usr/lib/x86_64-linux-gnu/gtk-3.0/modules;
 if [ -d "$gtk3stuffs" ]; then
 	for i in $gtk3stuffs/*.so; do
 		if [ -f "$i" ]; then
@@ -218,7 +218,7 @@ fi
 jdkdirname=`ls $installdir/ | grep jdk | sort -r | head -n 1`
 if [ -n "$jdkdirname" ]; then
 	JAVA_HOME=$installdir/$jdkdirname;
-	if [ -d "$JAVA_HOME/bin" ]; then	
+	if [ -d "$JAVA_HOME/bin" ]; then
 		_augment PATH "$JAVA_HOME"/bin;
 
 		JRE_HOME=$JAVA_HOME/jre;
@@ -283,7 +283,7 @@ if [ -n "$sbcl_dir_name" ] && [ -d "$lisp_path" ]; then
 fi
 
 # -------------------------- LaTeX/latex -------------------------------------
-# Custom variables for TeXLive 2011 environments, after 
+# Custom variables for TeXLive 2011 environments, after
 # MANPATH configuration needs to be done in /etc/manpath.config
 # Please note, $MANPATH is not loaded during startup, so you can
 # refresh it here.
