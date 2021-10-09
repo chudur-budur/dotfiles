@@ -149,12 +149,12 @@ fi
 # shell variable in the gitignore file.
 git >/dev/null 2>&1
 if [ "$?" = "1" ]; then
-	git config --global core.excludesfile ~/.gitignore_global 
+	git config --global core.excludesfile ~/.gitignore_global
 fi
 
 # git auto completion
-if [ -f "~/.git-completion.bash" ]; then
-    source ~/.git-completion.bash;
+if [ -f "$HOME/.git-completion.bash" ]; then
+    source "$HOME/.git-completion.bash"
 fi
 
 # git aware prompt
