@@ -15,7 +15,7 @@ Dotfiles for `~`
 * `vim`: `~/.vim` folder mirror
 * `vimrc`: self explanatory
 * `Xdefaults`: `~/.Xdefaults` mirror
-* `task`: `~/.task` mirror (almost unused)
-* `taskrc`: `~/.taskrc` mirror (almost unused)
-* `msuhpcextra`: I use it only for the msu hpc account, basically a reduced version of `myenv`.
+* `task`: `~/.task` mirror (hardly used)
+* `taskrc`: `~/.taskrc` mirror (hardly used)
+* `msuhpcextra`: I use it only for the msu hpcc account, basically a reduced version of `myenv`.
 
