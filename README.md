@@ -2,7 +2,7 @@
 
 Dotfiles for `~`
 
-##### Contents:
+**Contents:**
 * `bash`: `~/.bash` mirror.
 * `emacs.d`: `~/.emacs.d` mirror
 * `fonts`: `~/.fonts` mirror
