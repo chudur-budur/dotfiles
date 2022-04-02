@@ -3,7 +3,7 @@
 " and also make a link to dot-vim from the dropbox as ~/.vim
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" The whole world may not be wrong, so -- 
+" The whole world may not be wrong, so --
 " Actually I am not quite sure, why do we need this.
 set nocompatible
 
@@ -37,7 +37,7 @@ Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
 " different version somewhere else.
 " Plugin 'ascenator/L9', {'name': 'newL9'}
 
-" vim airline 
+" vim airline
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 
@@ -47,7 +47,7 @@ Plugin 'scrooloose/nerdtree'
 " csv plugin from https://github.com/chrisbra/csv.vim#using-a-plugin-manager
 " Plugin 'chrisbra/csv.vim'
 
-" Nord colorscheme for vim 
+" Nord colorscheme for vim
 " https://github.com/arcticicestudio/nord-vim
 Plugin 'arcticicestudio/nord-vim'
 
@@ -83,7 +83,7 @@ let username = $USER
 set display+=lastline
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" this will first enable and no-wrapping which is my default, and then 
+" this will first enable and no-wrapping which is my default, and then
 " it can be toggled using F2 key.
 set wrap! go+=b
 nnoremap <silent><expr> <f2> ':set wrap! go'.'-+'[&wrap]."=b\r"
@@ -142,6 +142,22 @@ autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 autocmd BufWinLeave * call clearmatches()
 
+" Remove trailing spaces
+function TrimWhiteSpace()
+    %s/\s*$//
+    ''
+endfunction
+
+" set list listchars=trail:.,extends:>
+" autocmd FileWritePre * call TrimWhiteSpace()
+" autocmd FileAppendPre * call TrimWhiteSpace()
+" autocmd FilterWritePre * call TrimWhiteSpace()
+" autocmd BufWritePre * call TrimWhiteSpace()
+
+map <C-W> :call TrimWhiteSpace()<CR>
+map! <C-W> :call TrimWhiteSpace()<CR>
+
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " On windoze system, backspace doesn't work for some reason
 if has("gui_win32")
@@ -154,9 +170,9 @@ endif
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " To use the system clipboard for cut-copy-paste
-" The below script is taken from here -- 
+" The below script is taken from here --
 " http://raghavan.info/blog/2013/02/10/
-" 	bind-ctrl-v-to-copy-paste-in-vim-without-affecting-blockwise-selection/ 
+" 	bind-ctrl-v-to-copy-paste-in-vim-without-affecting-blockwise-selection/
 " CTRL-X CTRL-X and SHIFT-DEL are CUT
 vnoremap <C-X><C-X> "+x
 vnoremap <S-Del> "+x
@@ -198,7 +214,7 @@ if has('gui_running')
     elseif hostname() == "kopashamsu.local"
         set guifont=luculent:h17
     elseif hostname() == "penguin"
-        set guifont=Hack\ 14
+        set guifont=Hack\ 13
     elseif hostname() == "khaled-general"
         set guifont=SourceCodePro\ 15
     elseif hostname() == "INTERN6118"
@@ -284,8 +300,8 @@ let g:NERDTreeDirArrowCollapsible = '▾'
 " Syntax highlighting stuffs
 " Octave syntax
 augroup filetypedetect
-	au! BufRead,BufNewFile *.m,*.oct set filetype=octave 
-	au! BufRead,BufNewFile *.als set filetype=alloy 
+	au! BufRead,BufNewFile *.m,*.oct set filetype=octave
+	au! BufRead,BufNewFile *.als set filetype=alloy
 augroup END
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
