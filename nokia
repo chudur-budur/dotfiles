@@ -69,12 +69,12 @@ fi
 
 # ------------------------------- conda settings -----------------------------------------
 # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/home/khaled/opt/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+__conda_setup="$('/home/$USER/opt/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
 if [ $? -eq 0 ]; then
     eval "$__conda_setup"
 else
-    if [ -f "/home/khaled/opt/anaconda3/etc/profile.d/conda.sh" ]; then
-        source "/home/khaled/opt/anaconda3/etc/profile.d/conda.sh"
+    if [ -f "/home/$USER/opt/anaconda3/etc/profile.d/conda.sh" ]; then
+        source "/home/$USER/opt/anaconda3/etc/profile.d/conda.sh"
     fi
 fi
 unset __conda_setup
