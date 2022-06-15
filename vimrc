@@ -305,7 +305,7 @@ augroup filetypedetect
 augroup END
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" some test by khaled
+" some test by me
 inoremap <F5> <C-R>=ListMonths()<CR>
 func! ListMonths()
   call complete(col('.'), ['January', 'February', 'March',
