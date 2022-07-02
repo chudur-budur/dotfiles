@@ -33,11 +33,11 @@ Dotfiles for `~`
 ## Usage
 Clone the repo:
 ```bash
-git clone git@github.com:chudur-budur/dotfiles.git .dotfiles
+git clone git@github.com:chudur-budur/dotfiles.git ~/.dotfiles
 ```
 Update the submodules:
 ```bash
-cd .dotfiles
+cd ~/.dotfiles
 git submodule update --init --recursive
 ```
 Then make the symlinks:
