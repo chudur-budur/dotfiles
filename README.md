@@ -31,8 +31,12 @@ Dotfiles for `~`
 * `vimrc`: self explanatory
 
 # Usage
+Clone the repo.
 ```bash
 git clone git@github.com:chudur-budur/dotfiles.git .dotfiles
+```
+Update the submodules.
+```bash
 cd .dotfiles
 git submodule update --init --recursive
 ```
