@@ -32,6 +32,14 @@ Dotfiles for `~`
 
 # Usage
 ```bash
-git clone git@github.com:chudur-budur/dotfiles.git 
+git clone git@github.com:chudur-budur/dotfiles.git .dotfiles
+cd .dotfiles
 git submodule update --init --recursive
 ```
+Then make the symlinks --
+```bash
+cd ~
+ln -sf .dotfiles/bashrc .bashrc
+ln -sf .dotfiles/bash_aliases .bash_aliases
+```
+and so on.
