@@ -29,3 +29,9 @@ Dotfiles for `~`
 * `taskrc`: `~/.taskrc` mirror **(hardly used, deprecated)**.
 * `theanorc`: `theano` settings **(I guess no one uses it anymore)**.
 * `vimrc`: self explanatory
+
+# Usage
+```bash
+git clone git@github.com:chudur-budur/dotfiles.git 
+git submodule update --init --recursive
+```
