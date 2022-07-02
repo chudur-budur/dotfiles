@@ -30,17 +30,17 @@ Dotfiles for `~`
 * `theanorc`: `theano` settings **(I guess no one uses it anymore)**.
 * `vimrc`: self explanatory
 
-# Usage
-Clone the repo.
+## Usage
+Clone the repo:
 ```bash
 git clone git@github.com:chudur-budur/dotfiles.git .dotfiles
 ```
-Update the submodules.
+Update the submodules:
 ```bash
 cd .dotfiles
 git submodule update --init --recursive
 ```
-Then make the symlinks --
+Then make the symlinks:
 ```bash
 cd ~
 ln -sf .dotfiles/bashrc .bashrc
